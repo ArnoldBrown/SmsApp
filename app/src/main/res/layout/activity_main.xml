@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_gravity="top|bottom|left|right|center_vertical|fill_vertical|center_horizontal|fill_horizontal|center|fill|start|end" android:layout_width="match_parent" android:layout_height="match_parent">
+    <LinearLayout
+        android:id="@+id/header" android:gravity="top|bottom|left|right|center_vertical|fill_vertical|center_horizontal|fill_horizontal|center|fill|start|end" android:orientation="horizontal" android:padding="20dp" android:layout_width="match_parent" android:layout_height="wrap_content" android:weightSum="2.0">
+        <Button android:id="@+id/btnContacts" android:onClick="contactsClicked" android:clickable="true" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_margin="10dp" android:text="@string/display_contacts" android:layout_weight="1.0" />
+        <Button android:id="@+id/btnMessages" android:onClick="messagesClicked" android:clickable="true" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_margin="10dp" android:text="@string/display_messages" android:layout_weight="1.0" />
+    </LinearLayout>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        android:layout_below="@+id/header"></android.support.v7.widget.RecyclerView>
+</RelativeLayout>
