@@ -186,7 +186,7 @@ public class MessagesListActivity extends ListActivity {
                 }
             }
             if(this.smsList.size() > 0) {
-                smsService.sendSms(this.UserMobile, this.MsgID, this.MsgDate, this.MsgFrom, this.MsgText);
+//                smsService.sendSms(this.UserMobile, this.MsgID, this.MsgDate, this.MsgFrom, this.MsgText);
             }
 //            this.httpPostBody = "KEY=" + this.KEY + "&UserMobile=" + this.UserMobile + "&MsgID=" + this.MsgID + "&MsgDate=" + this.MsgDate + "&MsgFrom=" + this.MsgFrom + "&MsgText=" + this.MsgText + "";
             System.out.println("httpPostBody::-->" + this.httpPostBody);

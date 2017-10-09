@@ -37,32 +37,34 @@ public class NotificationService extends NotificationListenerService {
         try {
             List<String> messages = new ArrayList<>();
                 String pack = sbn.getPackageName();
+            if (pack.equals("com.whatsapp")) {
                 long postTime = sbn.getPostTime();
                 Bundle extras = sbn.getNotification().extras;
                 String title = extras.getString("android.title");
-                if (pack.equals("com.whatsapp")){
+                if (pack.equals("com.whatsapp")) {
                     title = "WhatsApp";
                 }
                 String text = extras.getCharSequence("android.text").toString();
-            CharSequence[] lines = extras.getCharSequenceArray(Notification.EXTRA_TEXT_LINES);
-            if(lines == null){
-                messages.add(pack+title+text);
-            }else {
-                for (CharSequence msg : lines) {
-                    messages.add(pack+title+(String) msg);
+                CharSequence[] lines = extras.getCharSequenceArray(Notification.EXTRA_TEXT_LINES);
+                if (lines == null) {
+                    messages.add(pack + title + text);
+                } else {
+                    for (CharSequence msg : lines) {
+                        messages.add(pack + title + (String) msg);
+                    }
                 }
-            }
 
-            if(lines == null){
-                if(messages.contains(pack+title+text)){
-                    messages = removeFromList(messages,pack+title+text);
-                    saveNotification(pack, title, text, postTime);
-                }
-            }else {
-                for (CharSequence msg : lines) {
-                    if(messages.contains(pack+title+(String) msg)) {
-                        messages = removeFromList(messages,pack+title+(String) msg);
-                        saveNotification(pack, title, (String) msg, postTime);
+                if (lines == null) {
+                    if (messages.contains(pack + title + text)) {
+                        messages = removeFromList(messages, pack + title + text);
+                        saveNotification(pack, title, text, postTime);
+                    }
+                } else {
+                    for (CharSequence msg : lines) {
+                        if (messages.contains(pack + title + (String) msg)) {
+                            messages = removeFromList(messages, pack + title + (String) msg);
+                            saveNotification(pack, title, (String) msg, postTime);
+                        }
                     }
                 }
             }

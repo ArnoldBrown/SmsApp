@@ -6,6 +6,7 @@ public class SMSData {
     private String date;
     private String date_sent;
     private String number;
+    private String tonNumber;
     private String person;
 
     public String getNumber() {
@@ -54,5 +55,13 @@ public class SMSData {
 
     public void set_id(String _id) {
         this._id = _id;
+    }
+
+    public String getTonNumber() {
+        return tonNumber;
+    }
+
+    public void setTonNumber(String tonNumber) {
+        this.tonNumber = tonNumber;
     }
 }

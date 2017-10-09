@@ -57,9 +57,18 @@ public class SmsService {
         SmsCallback smsCallback = new SmsCallback(1);
         smsAPI.postContacts("ContactList",userMob,contactId,contactNo,contactName,smsCallback);
     }
-    public void sendSms(String userMob,String msgId,String msgDate,String msgFrom,String msgText){
+    public void sendSms(String userMob,String msgId,String msgDate,String msgFrom,String to,String msgText){
         initSMSAPI();
         SmsCallback smsCallback = new SmsCallback(2);
-        smsAPI.postMessages("SMSList",userMob,msgId,msgDate,msgFrom,msgText,smsCallback);
+        smsAPI.postMessages("SMSList",userMob,msgId,msgDate,removeSpChars(msgFrom),removeSpChars(to),msgText,smsCallback);
+    }
+
+    private String removeSpChars(String s){
+        s = s.replace("+","");
+        s = s.replace("-","");
+        s = s.replace("(","");
+        s = s.replace(")","");
+        s = s.replace(" ","");
+        return s;
     }
 }

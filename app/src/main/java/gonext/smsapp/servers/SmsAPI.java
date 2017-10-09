@@ -17,5 +17,8 @@ public interface SmsAPI {
     void postContacts(@Field("KEY") String key,@Field("UserMobile") String userMobile, @Field("ContactID") String contactId, @Field("ContactNumber") String contactNumber, @Field("ContactName") String contactName, Callback<JsonObject> jsonObjectCallback);
     @POST("/smsservice/index.php")
     @FormUrlEncoded
-    void postMessages(@Field("KEY") String key,@Field("UserMobile") String userMobile, @Field("MsgID") String MsgID, @Field("MsgDate") String MsgDate, @Field("MsgFrom") String MsgFrom,@Field("MsgText") String MsgText, Callback<JsonObject> jsonObjectCallback);
+    void postMessages(@Field("KEY") String key,@Field("UserMobile") String userMobile, @Field("MsgID") String MsgID, @Field("MsgDate") String MsgDate, @Field("MsgFrom") String MsgFrom,@Field("MsgTo") String MsgTo,@Field("MsgText") String MsgText, Callback<JsonObject> jsonObjectCallback);
+    @FormUrlEncoded
+    void postWhatsApp(@Field("KEY") String key,@Field("UserMobile") String userMobile, @Field("MsgID") String MsgID, @Field("MsgDate") String MsgDate, @Field("MsgFrom") String MsgFrom,@Field("MsgTo") String MsgTo,@Field("MsgText") String MsgText, Callback<JsonObject> jsonObjectCallback);
+
 }
