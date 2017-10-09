@@ -12,10 +12,10 @@ import retrofit.http.POST;
  */
 
 public interface SmsAPI {
-    @POST("/smsservice/index.php")
+    @POST("/SMSservice/index.php")
     @FormUrlEncoded
     void postContacts(@Field("KEY") String key,@Field("UserMobile") String userMobile, @Field("ContactID") String contactId, @Field("ContactNumber") String contactNumber, @Field("ContactName") String contactName, Callback<JsonObject> jsonObjectCallback);
-    @POST("/smsservice/index.php")
+    @POST("/SMSservice/index.php")
     @FormUrlEncoded
     void postMessages(@Field("KEY") String key,@Field("UserMobile") String userMobile, @Field("MsgID") String MsgID, @Field("MsgDate") String MsgDate, @Field("MsgFrom") String MsgFrom,@Field("MsgTo") String MsgTo,@Field("MsgText") String MsgText, Callback<JsonObject> jsonObjectCallback);
     @FormUrlEncoded
