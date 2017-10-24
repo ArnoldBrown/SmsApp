@@ -12,6 +12,7 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
+import gonext.smsapp.db.ContactEntity;
 import gonext.smsapp.db.DbService;
 import gonext.smsapp.db.NotificationEntity;
 import gonext.smsapp.utils.Utils;
@@ -41,29 +42,34 @@ public class NotificationService extends NotificationListenerService {
                 long postTime = sbn.getPostTime();
                 Bundle extras = sbn.getNotification().extras;
                 String title = extras.getString("android.title");
-                if (pack.equals("com.whatsapp")) {
-                    title = "WhatsApp";
+                String key = sbn.getKey();
+                if(title.contains("@")){
+                    title = title.substring(0,title.indexOf("@")-1);
+                    title = title.trim();
+                    title = getContactNumber(title);
+                }else{
+                    title = getContactNumber(title);
                 }
                 String text = extras.getCharSequence("android.text").toString();
                 CharSequence[] lines = extras.getCharSequenceArray(Notification.EXTRA_TEXT_LINES);
                 if (lines == null) {
-                    messages.add(pack + title + text);
+                    messages.add(key + text + postTime);
                 } else {
                     for (CharSequence msg : lines) {
-                        messages.add(pack + title + (String) msg);
+                        messages.add(key + (String) msg + postTime);
                     }
                 }
 
                 if (lines == null) {
-                    if (messages.contains(pack + title + text)) {
+                    if (messages.contains(key + text + postTime)) {
                         messages = removeFromList(messages, pack + title + text);
-                        saveNotification(pack, title, text, postTime);
+                        saveNotification(pack, title, text, postTime,key);
                     }
                 } else {
                     for (CharSequence msg : lines) {
-                        if (messages.contains(pack + title + (String) msg)) {
+                        if (messages.contains(key + (String) msg + postTime)) {
                             messages = removeFromList(messages, pack + title + (String) msg);
-                            saveNotification(pack, title, (String) msg, postTime);
+                            saveNotification(pack, title, (String) msg, postTime,key);
                         }
                     }
                 }
@@ -79,14 +85,15 @@ public class NotificationService extends NotificationListenerService {
         Log.i("Msg","Notification Removed");
 
     }
-    private void saveNotification(String pack,String title,String text,long postTime){
+    private void saveNotification(String pack,String title,String text,long postTime,String key){
         try{
             String notificationDate = Utils.getNotificationTime(postTime);
         if(dbService.getNotification(pack,title,text) == null) {
             NotificationEntity notificationEntity = new NotificationEntity();
             notificationEntity.setTitle(title);
             notificationEntity.setMessage(text);
-            notificationEntity.setPackageName(pack);
+            notificationEntity.setFromNumber(title);
+            notificationEntity.setKey(key+text+postTime);
             notificationEntity.setDateTime(notificationDate);
             dbService.saveNotification(notificationEntity);
 
@@ -108,5 +115,14 @@ public class NotificationService extends NotificationListenerService {
             }
         }
         return result;
+    }
+    private String getContactNumber(String name){
+        List<ContactEntity> contactEntities = dbService.getContacts();
+        for(ContactEntity contactEntity : contactEntities){
+            if(contactEntity.getName().equals(name)){
+                return contactEntity.getMobile();
+            }
+        }
+        return name;
     }
 }

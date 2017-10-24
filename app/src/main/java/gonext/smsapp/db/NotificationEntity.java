@@ -12,19 +12,30 @@ public class NotificationEntity {
     private int id;
     @DatabaseField(columnName = "Title")
     private String title;
-    @DatabaseField(columnName = "PackageName")
-    private String packageName;
+    @DatabaseField(columnName = "fromNumber")
+    private String fromNumber;
     @DatabaseField(columnName = "Message")
     private String message;
     @DatabaseField(columnName = "DateTime")
     private String dateTime;
+    @DatabaseField(columnName = "Key")
+    private String key;
 
-    public String getPackageName() {
-        return packageName;
+
+    public String getKey() {
+        return key;
     }
 
-    public void setPackageName(String packageName) {
-        this.packageName = packageName;
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    public String getFromNumber() {
+        return fromNumber;
+    }
+
+    public void setFromNumber(String fromNumber) {
+        this.fromNumber = fromNumber;
     }
 
     public int getId() {
@@ -64,9 +75,10 @@ public class NotificationEntity {
         return "NotificationEntity{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
-                ", packageName='" + packageName + '\'' +
+                ", fromNumber='" + fromNumber + '\'' +
                 ", message='" + message + '\'' +
                 ", dateTime='" + dateTime + '\'' +
+                ", key='" + key + '\'' +
                 '}';
     }
 }

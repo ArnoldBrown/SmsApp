@@ -34,6 +34,16 @@ public class DbService {
             e.printStackTrace();
         }
     }
+
+    public List<ContactEntity> getContacts(){
+        try {
+           return contactEntityDao.queryForAll();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return new ArrayList<>();
+    }
+
     public ContactEntity getContact(String contactId){
         try {
             return contactEntityDao.queryBuilder().where().eq("ContactId",contactId).queryForFirst();
@@ -81,6 +91,14 @@ public class DbService {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public void deleteNotification(NotificationEntity notificationEntity){
+        try{
+            notificationEntityDao.delete(notificationEntity);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
 }

