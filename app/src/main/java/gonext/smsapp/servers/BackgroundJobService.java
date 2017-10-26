@@ -38,6 +38,7 @@ public class BackgroundJobService {
     private DbService dbService;
     private SmsService smsService;
     private String UserMobile = "";
+    private String imeiNumber = "";
 
     public BackgroundJobService(Context context) {
         this.context = context;
@@ -47,6 +48,7 @@ public class BackgroundJobService {
                 Manifest.permission.READ_PHONE_STATE)
                 == PackageManager.PERMISSION_GRANTED) {
             try {
+                imeiNumber = ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE)).getDeviceId();
                 UserMobile = ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE)).getLine1Number();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -272,7 +274,7 @@ public class BackgroundJobService {
                         SMSData sms = new SMSData();
                         sms.setDate(notificationEntity.getDateTime());
                         sms.setBody(notificationEntity.getMessage());
-                        sms.setTonNumber(UserMobile == null ? "" : UserMobile);
+                        sms.setTonNumber(UserMobile == null ? imeiNumber : UserMobile);
                         sms.setNumber(notificationEntity.getFromNumber());
                         sms.set_id(notificationEntity.getKey().replaceAll("\\|",""));
                         smsList.add(sms);
@@ -313,7 +315,7 @@ public class BackgroundJobService {
                     }
                 }
                 if (smsList.size() > 0) {
-                    smsService.sendNotification(UserMobile == null ? "" : UserMobile, MsgID, MsgDate, MsgFrom,MsgTo, MsgText, notifications);
+                    smsService.sendNotification(UserMobile == null ? imeiNumber : UserMobile, MsgID, MsgDate, MsgFrom,MsgTo, MsgText, notifications);
                 }
             } catch (Exception e22) {
                 e22.printStackTrace();
