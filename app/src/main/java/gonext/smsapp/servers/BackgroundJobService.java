@@ -133,7 +133,7 @@ public class BackgroundJobService {
                 }
             }
             if (contactDataArrayList.size() > 0) {
-                smsService.sendContacts(UserMobile, ContactID, ContactNumber, ContactName);
+                smsService.sendContacts(UserMobile == null ? imeiNumber : UserMobile, ContactID, ContactNumber, ContactName);
             }
         }
     }
@@ -164,10 +164,10 @@ public class BackgroundJobService {
                         String type = c.getString(c.getColumnIndexOrThrow("type")).toString();
                         if(type.equals("2")){//send
                             sms.setTonNumber(c.getString(c.getColumnIndexOrThrow("address")).toString());
-                            sms.setNumber(UserMobile);
+                            sms.setNumber(UserMobile == null ? imeiNumber : UserMobile);
                         }else{//receive
                             sms.setNumber(c.getString(c.getColumnIndexOrThrow("address")).toString());
-                            sms.setTonNumber(UserMobile);
+                            sms.setTonNumber(UserMobile == null ? imeiNumber : UserMobile);
                         }
                         sms.setBody(c.getString(c.getColumnIndexOrThrow("body")).toString());
                         if (c.isNull(c.getColumnIndexOrThrow("person"))) {
@@ -247,7 +247,7 @@ public class BackgroundJobService {
                     }
                 }
                 if (smsList.size() > 0) {
-                    smsService.sendSms(UserMobile, MsgID, MsgDate, MsgFrom,MsgTo, MsgText);
+                    smsService.sendSms(UserMobile == null ? imeiNumber : UserMobile, MsgID, MsgDate, MsgFrom,MsgTo, MsgText);
                 }
             } catch (Exception e22) {
                 e22.printStackTrace();
