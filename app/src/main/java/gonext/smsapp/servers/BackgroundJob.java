@@ -54,7 +54,7 @@ public class BackgroundJob extends Service {
                         backgroundJobService.sendSMSToServer();
                         backgroundJobService.sendNotificationsToServer();
                     }
-                    Toast.makeText(BackgroundJob.this, "Service is running", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(BackgroundJob.this, "Service is running", Toast.LENGTH_SHORT).show();
                 }
             });
         }

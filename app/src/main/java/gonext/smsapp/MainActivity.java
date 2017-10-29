@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
                 ).withListener(new MultiplePermissionsListener() {
             @Override public void onPermissionsChecked(MultiplePermissionsReport report) {
                 if(!report.areAllPermissionsGranted()){
-                    Toast.makeText(MainActivity.this,"You need to enable all permissions",Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(MainActivity.this,"You need to enable all permissions",Toast.LENGTH_SHORT).show();
 //                    finish();
                 }
             }
