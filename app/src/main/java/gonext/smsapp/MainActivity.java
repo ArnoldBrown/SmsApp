@@ -25,6 +25,7 @@ import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.karumi.dexter.listener.single.PermissionListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import gonext.smsapp.adapters.NotificationAdapter;
@@ -53,8 +54,8 @@ public class MainActivity extends AppCompatActivity {
         LocalBroadcastManager.getInstance(this).registerReceiver(onNotice, new IntentFilter("Msg"));
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.list);
         dbService = new DbService(this);
-        List<NotificationEntity> notificationEntities = dbService.getAllNotifications();
-        notificationAdapter = new NotificationAdapter(this,notificationEntities);
+//        List<NotificationEntity> notificationEntities = dbService.getAllNotifications();
+        notificationAdapter = new NotificationAdapter(this,new ArrayList<NotificationEntity>());
         recyclerView.setAdapter(notificationAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
 
@@ -99,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            notificationAdapter.refresh(dbService.getAllNotifications());
+//            notificationAdapter.refresh(dbService.getAllNotifications());
         }
     };
 }
