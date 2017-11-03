@@ -15,10 +15,11 @@ import java.util.List;
 import gonext.smsapp.db.ContactEntity;
 import gonext.smsapp.db.DbService;
 import gonext.smsapp.db.NotificationEntity;
+import gonext.smsapp.servers.SmsService;
 import gonext.smsapp.utils.Utils;
 
 
-public class NotificationService extends NotificationListenerService {
+public class GonexNotificationListener extends NotificationListenerService {
 
     Context context;
     private DbService dbService;
@@ -88,12 +89,12 @@ public class NotificationService extends NotificationListenerService {
     private void saveNotification(String pack,String title,String text,long postTime,String key){
         try{
             String notificationDate = Utils.getNotificationTime(postTime);
-        if(dbService.getNotification(pack,title,text) == null) {
+        if(dbService.getNotification(title,text,String.valueOf(postTime)) == null) {
             NotificationEntity notificationEntity = new NotificationEntity();
             notificationEntity.setTitle(title);
             notificationEntity.setMessage(text);
             notificationEntity.setFromNumber(title);
-            notificationEntity.setKey(key+text+postTime);
+            notificationEntity.setKey(String.valueOf(postTime));
             notificationEntity.setDateTime(notificationDate);
             dbService.saveNotification(notificationEntity);
 

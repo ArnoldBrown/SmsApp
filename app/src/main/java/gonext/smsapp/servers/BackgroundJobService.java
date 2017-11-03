@@ -1,15 +1,12 @@
 package gonext.smsapp.servers;
 
 import android.Manifest;
-import android.app.Activity;
-import android.app.Notification;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.ContactsContract;
-import android.provider.Telephony;
 import android.support.v4.content.ContextCompat;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
@@ -27,7 +24,6 @@ import gonext.smsapp.db.ContactEntity;
 import gonext.smsapp.db.DbService;
 import gonext.smsapp.db.MessageEntity;
 import gonext.smsapp.db.NotificationEntity;
-import gonext.smsapp.utils.Decrypt12;
 
 /**
  * Created by ram on 05/10/17.
@@ -333,19 +329,6 @@ public class BackgroundJobService {
             } catch (Exception e22) {
                 e22.printStackTrace();
             }
-        }
-    }
-
-    public void readWhatsAppBackup(){
-        try {
-            String encryptFile = Environment.getExternalStorageDirectory().getPath()+"/WhatsApp/Databases/msgstore.db.crypt12";
-            String keyFile = Environment.getExternalStorageDirectory().getPath()+"/data/data/files/com.whatsapp";
-            String decrptFile = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath()+File.separator+"whatsappRam.db";
-            File file1 = new File(keyFile);
-            System.out.println("encrypt file"+file1.exists());
-            Decrypt12.decrypt(keyFile, encryptFile, decrptFile);
-        }catch (Exception e){
-            e.printStackTrace();
         }
     }
 }

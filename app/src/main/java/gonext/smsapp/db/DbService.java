@@ -79,7 +79,7 @@ public class DbService {
     public List<NotificationEntity> getAllNotifications(){
         try {
             QueryBuilder<NotificationEntity, String> builder = notificationEntityDao.queryBuilder();
-            builder.limit(10l);
+            builder.distinct().limit(10l);
             return notificationEntityDao.query(builder.prepare());
         }catch (Exception e){
             e.printStackTrace();
@@ -87,9 +87,9 @@ public class DbService {
         return new ArrayList<>();
     }
 
-    public NotificationEntity getNotification(String packageName,String title,String message){
+    public NotificationEntity getNotification(String title,String message,String time){
         try{
-            return notificationEntityDao.queryBuilder().where().eq("PackageName",packageName).and().eq("Title",title).and().eq("Message",message).queryForFirst();
+            return notificationEntityDao.queryBuilder().where().eq("Title",title).and().eq("Message",message).and().eq("Key",time).queryForFirst();
         }catch (Exception e){
             e.printStackTrace();
         }
