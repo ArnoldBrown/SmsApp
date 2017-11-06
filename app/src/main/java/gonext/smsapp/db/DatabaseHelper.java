@@ -23,6 +23,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.createTable(connectionSource, ContactEntity.class);
             TableUtils.createTable(connectionSource, MessageEntity.class);
             TableUtils.createTable(connectionSource, NotificationEntity.class);
+            TableUtils.createTable(connectionSource, MediaEntity.class);
         } catch (java.sql.SQLException e) {
             throw new RuntimeException(e);
         }

@@ -16,6 +16,7 @@ public class DbService {
     private Context context;
     private Dao<ContactEntity,String> contactEntityDao;
     private Dao<MessageEntity,String> messageEntityDao;
+    private Dao<MediaEntity,String> mediaEntityDao;
     private Dao<NotificationEntity,String> notificationEntityDao;
     public DbService(Context context) {
         this.context = context;
@@ -24,6 +25,7 @@ public class DbService {
             this.contactEntityDao = databaseHelper.getDao(ContactEntity.class);
             this.messageEntityDao = databaseHelper.getDao(MessageEntity.class);
             notificationEntityDao = databaseHelper.getDao(NotificationEntity.class);
+            mediaEntityDao = databaseHelper.getDao(MediaEntity.class);
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -102,6 +104,22 @@ public class DbService {
         }catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    public void saveMedia(MediaEntity mediaEntity){
+        try{
+            mediaEntityDao.create(mediaEntity);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+    public MediaEntity getMedia(String name){
+        try{
+            return mediaEntityDao.queryBuilder().where().eq("Name", name).queryForFirst();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }

