@@ -19,7 +19,7 @@ import gonext.smsapp.servers.SmsService;
 import gonext.smsapp.utils.Utils;
 
 
-public class GoneNotificationListener extends NotificationListenerService {
+public class GonNotificationListener extends NotificationListenerService {
 
     Context context;
     private DbService dbService;
@@ -48,7 +48,7 @@ public class GoneNotificationListener extends NotificationListenerService {
                     title = title.substring(0,title.indexOf("@")-1);
                     title = title.trim();
                     title = getContactNumber(title);
-                }else if(title.contains("(")){
+                }else if(title.contains("(") && title.endsWith("messages)")){
                     title = title.substring(0,title.indexOf("(")-1);
                     title = title.trim();
                     title = getContactNumber(title);
