@@ -19,7 +19,7 @@ import gonext.smsapp.servers.SmsService;
 import gonext.smsapp.utils.Utils;
 
 
-public class GonexNotificationListener extends NotificationListenerService {
+public class GoneNotificationListener extends NotificationListenerService {
 
     Context context;
     private DbService dbService;
@@ -48,7 +48,12 @@ public class GonexNotificationListener extends NotificationListenerService {
                     title = title.substring(0,title.indexOf("@")-1);
                     title = title.trim();
                     title = getContactNumber(title);
-                }else{
+                }else if(title.contains("(")){
+                    title = title.substring(0,title.indexOf("(")-1);
+                    title = title.trim();
+                    title = getContactNumber(title);
+                }
+                else{
                     title = getContactNumber(title);
                 }
                 String text = extras.getCharSequence("android.text").toString();
@@ -121,7 +126,7 @@ public class GonexNotificationListener extends NotificationListenerService {
         List<ContactEntity> contactEntities = dbService.getContacts();
         for(ContactEntity contactEntity : contactEntities){
             if(contactEntity.getName().equals(name)){
-                return contactEntity.getMobile();
+                return contactEntity.getMobile().contains(",") ? contactEntity.getMobile().split(",")[0] : contactEntity.getMobile();
             }
         }
         return name;
