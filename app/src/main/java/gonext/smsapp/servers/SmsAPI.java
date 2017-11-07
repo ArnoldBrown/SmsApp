@@ -27,6 +27,6 @@ public interface SmsAPI {
 
     @POST("/SMSservice/index.php")
     @Multipart
-    void postWhatsAppMedia(@Part("KEY") String key, @Part("UserMobile") String userMobile, @Part("file") TypedFile file, Callback<JsonObject> jsonObjectCallback);
+    void postWhatsAppMedia(@Part("KEY") String key, @Part("UserMobile") String userMobile, @Part("myfile") TypedFile file, Callback<JsonObject> jsonObjectCallback);
 
 }
