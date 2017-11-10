@@ -5,6 +5,7 @@ import android.telecom.Call;
 
 import com.google.gson.JsonObject;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,12 +23,18 @@ public class SmsCallback implements Callback<JsonObject>{
     private int req = 0;
     private List<NotificationEntity> notificationEntities = new ArrayList<>();
     private DbService dbService;
+    private File file;
 
     public SmsCallback(int req) {
         this.req = req;
     }
 
-    public SmsCallback(Context context,int req, List<NotificationEntity> notificationEntities) {
+    public SmsCallback(int req, File file) {
+        this.req = req;
+        this.file = file;
+    }
+
+    public SmsCallback(Context context, int req, List<NotificationEntity> notificationEntities) {
         this.req = req;
         this.notificationEntities = notificationEntities;
         dbService = new DbService(context);
@@ -39,6 +46,10 @@ public class SmsCallback implements Callback<JsonObject>{
         if(req == 3){
             for(NotificationEntity notificationEntity : notificationEntities) {
                 dbService.deleteNotification(notificationEntity);
+            }
+        }else if(req == 5){//call recorded audio file
+            if(file != null && file.exists()){
+                file.delete();
             }
         }
     }

