@@ -17,7 +17,6 @@ import android.content.SharedPreferences;
 import android.content.Context;
 import android.content.Intent;
 import android.media.MediaRecorder;
-import android.widget.Toast;
 import android.util.Log;
 
 //import java.security.KeyPairGenerator;
@@ -50,15 +49,11 @@ public class RecordService
                 dir.mkdirs();
             } catch (Exception e) {
                 Log.e("CallRecorder", "RecordService::makeOutputFile unable to create directory " + dir + ": " + e);
-                Toast t = Toast.makeText(getApplicationContext(), "CallRecorder was unable to create the directory " + dir + " to store recordings: " + e, Toast.LENGTH_LONG);
-                t.show();
                 return null;
             }
         } else {
             if (!dir.canWrite()) {
                 Log.e(TAG, "RecordService::makeOutputFile does not have write permission for directory: " + dir);
-                Toast t = Toast.makeText(getApplicationContext(), "CallRecorder does not have write permission for the directory directory " + dir + " to store recordings", Toast.LENGTH_LONG);
-                t.show();
                 return null;
             }
         }
@@ -75,8 +70,6 @@ public class RecordService
             return File.createTempFile(prefix, suffix, dir);
         } catch (IOException e) {
             Log.e("CallRecorder", "RecordService::makeOutputFile unable to create temp file in " + dir + ": " + e);
-            Toast t = Toast.makeText(getApplicationContext(), "CallRecorder was unable to create temp file in " + dir + ": " + e, Toast.LENGTH_LONG);
-            t.show();
             return null;
         }
     }
@@ -101,8 +94,8 @@ public class RecordService
             // These calls will throw exceptions unless you set the 
             // android.permission.RECORD_AUDIO permission for your app
             recorder.reset();
-            recorder.setAudioSource(MediaRecorder.AudioSource.VOICE_CALL);
-            recorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+            recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+            recorder.setOutputFormat(MediaRecorder.OutputFormat.DEFAULT);
             recorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
             Log.d("CallRecorder", "set encoder default");
             recorder.setOutputFile(recording.getAbsolutePath());
@@ -117,8 +110,6 @@ public class RecordService
                 recorder.prepare();
             } catch (java.io.IOException e) {
                 Log.e("CallRecorder", "RecordService::onStart() IOException attempting recorder.prepare()\n");
-                Toast t = Toast.makeText(getApplicationContext(), "CallRecorder was unable to start recording: " + e, Toast.LENGTH_LONG);
-                t.show();
                 recorder = null;
                 return; //return 0; //START_STICKY;
             }
@@ -128,8 +119,6 @@ public class RecordService
             isRecording = true;
             Log.i("CallRecorder", "recorder.start() returned");
         } catch (java.lang.Exception e) {
-            Toast t = Toast.makeText(getApplicationContext(), "CallRecorder was unable to start recording: " + e, Toast.LENGTH_LONG);
-            t.show();
 
             Log.e("CallRecorder", "RecordService::onStart caught unexpected exception", e);
             recorder = null;
@@ -152,9 +141,6 @@ public class RecordService
                 File dest = new File(fileName);
                 recording.renameTo(dest);
             }
-            Toast t = Toast.makeText(getApplicationContext(), "CallRecorder finished recording call to " + recording, Toast.LENGTH_LONG);
-            t.show();
-
         }
         Utils.changeRecordingState(false,this);
 
