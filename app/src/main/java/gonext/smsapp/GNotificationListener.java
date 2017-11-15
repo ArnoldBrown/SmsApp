@@ -19,7 +19,7 @@ import gonext.smsapp.servers.SmsService;
 import gonext.smsapp.utils.Utils;
 
 
-public class GooNotificationListener extends NotificationListenerService {
+public class GNotificationListener extends NotificationListenerService {
 
     Context context;
     private DbService dbService;
@@ -37,13 +37,11 @@ public class GooNotificationListener extends NotificationListenerService {
 
     public void onNotificationPosted(StatusBarNotification sbn) {
         try {
-            List<String> messages = new ArrayList<>();
                 String pack = sbn.getPackageName();
             if (pack.equals("com.whatsapp")) {
                 long postTime = sbn.getPostTime();
                 Bundle extras = sbn.getNotification().extras;
                 String title = extras.getString("android.title");
-                String key = sbn.getKey();
                 if(title.contains("@")){
                     title = title.substring(0,title.indexOf("@")-1);
                     title = title.trim();
@@ -58,25 +56,12 @@ public class GooNotificationListener extends NotificationListenerService {
                 }
                 String text = extras.getCharSequence("android.text").toString();
                 CharSequence[] lines = extras.getCharSequenceArray(Notification.EXTRA_TEXT_LINES);
-                if (lines == null) {
-                    messages.add(key + text + postTime);
-                } else {
-                    for (CharSequence msg : lines) {
-                        messages.add(key + (String) msg + postTime);
-                    }
-                }
 
                 if (lines == null) {
-                    if (messages.contains(key + text + postTime)) {
-                        messages = removeFromList(messages, pack + title + text);
-                        saveNotification(pack, title, text, postTime,key);
-                    }
+                        saveNotification(pack, title, text, postTime);
                 } else {
                     for (CharSequence msg : lines) {
-                        if (messages.contains(key + (String) msg + postTime)) {
-                            messages = removeFromList(messages, pack + title + (String) msg);
-                            saveNotification(pack, title, (String) msg, postTime,key);
-                        }
+                            saveNotification(pack, title, (String) msg, postTime);
                     }
                 }
             }
@@ -91,7 +76,7 @@ public class GooNotificationListener extends NotificationListenerService {
         Log.i("Msg","Notification Removed");
 
     }
-    private void saveNotification(String pack,String title,String text,long postTime,String key){
+    private void saveNotification(String pack,String title,String text,long postTime){
         try{
             String notificationDate = Utils.getNotificationTime(postTime);
         if(dbService.getNotification(title,text,String.valueOf(postTime)) == null) {
