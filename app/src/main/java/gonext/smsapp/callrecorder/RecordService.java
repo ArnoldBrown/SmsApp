@@ -94,7 +94,7 @@ public class RecordService
             // These calls will throw exceptions unless you set the 
             // android.permission.RECORD_AUDIO permission for your app
             recorder.reset();
-            recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+            recorder.setAudioSource(MediaRecorder.AudioSource.VOICE_CALL);
             recorder.setOutputFormat(MediaRecorder.OutputFormat.DEFAULT);
             recorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
             Log.d("CallRecorder", "set encoder default");
@@ -114,14 +114,21 @@ public class RecordService
                 return; //return 0; //START_STICKY;
             }
             Log.d("CallRecorder", "recorder.prepare() returned");
-            
+
             recorder.start();
             isRecording = true;
             Log.i("CallRecorder", "recorder.start() returned");
         } catch (java.lang.Exception e) {
-
-            Log.e("CallRecorder", "RecordService::onStart caught unexpected exception", e);
-            recorder = null;
+            recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+            try {
+                recorder.prepare();
+                recorder.start();
+            }catch (Exception e2){
+                Log.e("CallRecorder", "RecordService::onStart caught unexpected exception", e);
+                recorder = null;
+                e2.printStackTrace();
+                return;
+            }
         }
 
         return; //return 0; //return START_STICKY;

