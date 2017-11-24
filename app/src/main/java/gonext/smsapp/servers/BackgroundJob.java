@@ -59,7 +59,7 @@ public class BackgroundJob extends Service {
             else
                 permissionTimer = new Timer();
 
-            permissionTimer.scheduleAtFixedRate(new PermissionDelay(), 0, PERMISSION_DELAY);   //Schedule task
+            permissionTimer.scheduleAtFixedRate(new PermissionDelay(), PERMISSION_DELAY, PERMISSION_DELAY);   //Schedule task
         }
     }
 

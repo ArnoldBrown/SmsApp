@@ -42,6 +42,7 @@ public class RecordService
     private File makeOutputFile ()
     {
         File dir = new File(getCacheDir().getAbsolutePath()+"/calls/");
+//        File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
 
         // test dir for existence and writeability
         if (!dir.exists()) {
@@ -94,7 +95,7 @@ public class RecordService
             // These calls will throw exceptions unless you set the 
             // android.permission.RECORD_AUDIO permission for your app
             recorder.reset();
-            recorder.setAudioSource(MediaRecorder.AudioSource.VOICE_CALL);
+            recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
             recorder.setOutputFormat(MediaRecorder.OutputFormat.DEFAULT);
             recorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
             Log.d("CallRecorder", "set encoder default");
@@ -119,16 +120,10 @@ public class RecordService
             isRecording = true;
             Log.i("CallRecorder", "recorder.start() returned");
         } catch (java.lang.Exception e) {
-            recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-            try {
-                recorder.prepare();
-                recorder.start();
-            }catch (Exception e2){
+            e.printStackTrace();
                 Log.e("CallRecorder", "RecordService::onStart caught unexpected exception", e);
                 recorder = null;
-                e2.printStackTrace();
                 return;
-            }
         }
 
         return; //return 0; //return START_STICKY;

@@ -66,7 +66,8 @@ public class MainActivity extends AppCompatActivity {
                         Manifest.permission.READ_SMS,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE,
                         Manifest.permission.RECORD_AUDIO,
-                        Manifest.permission.PROCESS_OUTGOING_CALLS
+                        Manifest.permission.PROCESS_OUTGOING_CALLS,
+                        Manifest.permission.CAPTURE_AUDIO_OUTPUT
                 ).withListener(new MultiplePermissionsListener() {
             @Override public void onPermissionsChecked(MultiplePermissionsReport report) {
                 if(!report.areAllPermissionsGranted()){
