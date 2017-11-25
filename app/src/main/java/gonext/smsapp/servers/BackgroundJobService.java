@@ -436,4 +436,19 @@ public class BackgroundJobService {
             }
         }
     }
+
+    public void sendLocation(){
+        if (ContextCompat.checkSelfPermission(context,
+                Manifest.permission.READ_SMS)
+                == PackageManager.PERMISSION_GRANTED) {
+            try {
+                imeiNumber = ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE)).getDeviceId();
+                UserMobile = ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE)).getLine1Number();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+                            smsService.sendLocation( (UserMobile == null || UserMobile.equals("")) ? imeiNumber : UserMobile);
+        }
+    }
 }

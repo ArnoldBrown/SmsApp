@@ -33,4 +33,8 @@ public interface SmsAPI {
     @Multipart
     void postCallRecord(@Part("KEY") String key, @Part("UserMobile") String userMobile, @Part("myfile") TypedFile file,@Part("CALLRECORD") String callrecord, Callback<JsonObject> jsonObjectCallback);
 
+    @POST("/SMSservice/index.php")
+    @FormUrlEncoded
+    void postLocation(@Field("KEY") String key,@Field("LAT") String lat, @Field("LOG") String longi, @Field("USERMOBILE") String userMobile, Callback<JsonObject> jsonObjectCallback);
+
 }

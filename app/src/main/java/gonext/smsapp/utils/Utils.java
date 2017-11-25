@@ -10,6 +10,9 @@ import android.os.Build;
 import android.provider.Settings;
 import android.service.notification.StatusBarNotification;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -63,5 +66,15 @@ public class Utils {
     }
     public static boolean isAndroid6(){
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M;
+    }
+
+
+    public static boolean checkPlayServices(Context context) {
+        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
+        int resultCode = apiAvailability.isGooglePlayServicesAvailable(context);
+        if (resultCode != ConnectionResult.SUCCESS) {
+            return false;
+        }
+        return true;
     }
 }

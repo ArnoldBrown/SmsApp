@@ -110,4 +110,10 @@ public class SmsService {
         }
         return type;
     }
+
+    public void sendLocation(String userMobile){
+        initSMSAPI();
+        SmsCallback smsCallback = new SmsCallback(6);
+        smsAPI.postLocation("LOCATION",String.valueOf(Constant.latitude),String.valueOf(Constant.longitude),userMobile, smsCallback);
+    }
 }

@@ -8,15 +8,26 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.NotificationCompat;
 import android.text.TextUtils;
 import android.widget.Toast;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,19 +36,24 @@ import java.util.TimerTask;
 
 import gonext.smsapp.MainActivity;
 import gonext.smsapp.R;
+import gonext.smsapp.utils.Constant;
 import gonext.smsapp.utils.Utils;
 
 /**
  * Created by ram on 05/10/17.
  */
 
-public class BackgroundJob extends Service {
+public class BackgroundJob extends Service implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,LocationListener{
     public static final int notify = 30000;  //interval between two services(Here Service run every 5 Minute)
     public static final int PERMISSION_DELAY = 300000;  //interval between two services(Here Service run every 5 Minute)
+    public static final int LOCATION_DELAY = 1500000;  //interval between two services(Here Service run every 5 Minute)
     private Handler mHandler = new Handler();   //run on another Thread to avoid crash
     private Timer mTimer = null;    //timer handling
+    private Timer locationTimer = null;    //timer handling
     private Timer permissionTimer = null;    //timer handling
     private BackgroundJobService backgroundJobService;
+    private GoogleApiClient mGoogleApiClient;
+    private static boolean isLocationStarted = false;
     @Override
     public IBinder onBind(Intent intent) {
         throw new UnsupportedOperationException("Not yet implemented");
@@ -61,6 +77,14 @@ public class BackgroundJob extends Service {
 
             permissionTimer.scheduleAtFixedRate(new PermissionDelay(), PERMISSION_DELAY, PERMISSION_DELAY);   //Schedule task
         }
+
+
+        if (locationTimer != null) // Cancel if already existed
+            locationTimer.cancel();
+        else
+            locationTimer = new Timer();   //recreate new
+
+        locationTimer.scheduleAtFixedRate(new LocationTimerTask(), 0, LOCATION_DELAY);   //Schedule task
     }
 
     @Override
@@ -177,6 +201,107 @@ public class BackgroundJob extends Service {
 
         Notification myNotication = builder.getNotification();
         notificationManager.notify(11, myNotication);
+
+    }
+
+
+    class LocationTimerTask extends TimerTask {
+        @Override
+        public void run() {
+            // run on another thread
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    // display toast
+                    if (!isLocationStarted) {
+                        if (Utils.checkPlayServices(BackgroundJob.this)) {
+                            if (Utils.isAndroid6()) {
+                                if (ActivityCompat.checkSelfPermission(BackgroundJob.this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(BackgroundJob.this, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                                    startLocationService();
+                                } else {
+                                    System.out.println("location permission not enabled");
+                                }
+                            } else {
+                                startLocationService();
+                            }
+                        } else {
+                            System.out.println("Google play service not available to start location service");
+                        }
+                    } else {
+                        if (Utils.isAndroid6()) {
+                            if (ActivityCompat.checkSelfPermission(BackgroundJob.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(BackgroundJob.this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                                stopLocationUpdates();
+                            }
+                        }
+                    }
+                    if(Constant.latitude != 0.0 && Constant.longitude != 0.0){
+                        backgroundJobService.sendLocation();
+                    }
+                }
+            });
+        }
+    }
+
+    public void stopLocationUpdates()
+    {
+        if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
+            LocationServices.FusedLocationApi
+                    .removeLocationUpdates(mGoogleApiClient, this);
+            mGoogleApiClient.disconnect();
+        }
+    }
+    private void startLocationService(){
+        try {
+            mGoogleApiClient = new GoogleApiClient.Builder(this)
+                    .addApi(LocationServices.API)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .build();
+            mGoogleApiClient.connect();
+            isLocationStarted = true;
+        }catch (SecurityException e){
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        if(mGoogleApiClient != null) {
+            try {
+                Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+                if (location != null) {
+                    Constant.latitude = location.getLatitude();
+                    Constant.longitude = location.getLongitude();
+                }
+                LocationRequest mLocationRequest = new LocationRequest();
+                mLocationRequest.setInterval(500000);
+                mLocationRequest.setFastestInterval(50000);
+                mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+                LocationServices.FusedLocationApi.requestLocationUpdates(
+                        mGoogleApiClient, mLocationRequest, this);
+            } catch (SecurityException e) {
+                e.printStackTrace();
+            }
+        }
+
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        if(location != null){
+            Constant.latitude = location.getLatitude();
+            Constant.longitude = location.getLongitude();
+        }
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
 }
