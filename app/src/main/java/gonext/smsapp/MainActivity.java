@@ -79,14 +79,14 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         }
 
-        PackageManager p = getPackageManager();
+        /*PackageManager p = getPackageManager();
         ComponentName componentName = new ComponentName(this, MainActivity.class); // activity which is first time open in manifiest file which is declare as <category android:name="android.intent.category.LAUNCHER" />
-        p.setComponentEnabledSetting(componentName,PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
+        p.setComponentEnabledSetting(componentName,PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);*/
 
         startService(new Intent(this, BackgroundJob.class)); //start service which is BackgroundJob.java
 
-        /*initializeWiFiListener();
-        initialMobileNetworkListener();*/
+        initializeWiFiListener();
+        initialMobileNetworkListener();
     }
 
     @Override
