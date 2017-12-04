@@ -38,6 +38,7 @@ dependencies {
     compile 'com.j256.ormlite:ormlite-android:4.48'
     compile 'com.karumi:dexter:4.1.0'
     compile 'com.google.android.gms:play-services-location:9.8.0'
+    compile 'com.github.flepsik:progress-ring-view:1.1.2'
     // https://mvnrepository.com/artifact/org.bouncycastle/bcprov-jdk16
     compile group: 'org.bouncycastle', name: 'bcprov-jdk16', version: '1.45'
 }
