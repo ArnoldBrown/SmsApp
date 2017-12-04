@@ -43,14 +43,20 @@ public class SmsCallback implements Callback<JsonObject>{
     @Override
     public void success(JsonObject o, Response response) {
         System.out.println(response);
-        if(req == 3){
-            for(NotificationEntity notificationEntity : notificationEntities) {
-                dbService.deleteNotification(notificationEntity);
+        try {
+            if (req == 3) {
+                for (NotificationEntity notificationEntity : notificationEntities) {
+                    if(dbService.getNotification(notificationEntity.getId()) != null) {
+                        dbService.deleteNotification(notificationEntity);
+                    }
+                }
+            } else if (req == 5) {//call recorded audio file
+                if (file != null && file.exists()) {
+                    file.delete();
+                }
             }
-        }else if(req == 5){//call recorded audio file
-            if(file != null && file.exists()){
-                file.delete();
-            }
+        }catch (Exception e){
+            e.printStackTrace();
         }
     }
 
