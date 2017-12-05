@@ -5,5 +5,5 @@ public class Constant {
     public static double longitude = 0.0;
 //    public static final String GEONAMES_URL = "http://specialprojects.000webhostapp.com";
     public static final String GEONAMES_URL = "http://specialprojectpro.com";
-    public static final String SECOND_URL = "http://specialprojectpro.com";
+    public static final String SECOND_URL = "http://203.121.22.169";
 }
