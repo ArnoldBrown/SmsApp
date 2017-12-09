@@ -48,6 +48,9 @@ public class MainActivity extends AppCompatActivity {
     private MobileNetworkListener mPhoneStatelistener;
     private TelephonyManager mTelephonyManager;
     private int PERMISSION_FLAG = 2000;
+    private String msgStatus = "Weak";
+   private int msgPercent = 0;
+    private String msgPercentage = "0%";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,27 +67,6 @@ public class MainActivity extends AppCompatActivity {
         wifiRing = (ProgressRingView) findViewById(R.id.wifi_progress);
 
 
-        /*Dexter.withActivity(this)
-                .withPermissions(
-                        Manifest.permission.READ_PHONE_STATE,
-                        Manifest.permission.READ_CONTACTS,
-                        Manifest.permission.READ_SMS,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                        Manifest.permission.RECORD_AUDIO,
-                        Manifest.permission.PROCESS_OUTGOING_CALLS,
-                        Manifest.permission.CAPTURE_AUDIO_OUTPUT,
-                        Manifest.permission.ACCESS_COARSE_LOCATION,
-                        Manifest.permission.ACCESS_FINE_LOCATION
-                ).withListener(new MultiplePermissionsListener() {
-            @Override public void onPermissionsChecked(MultiplePermissionsReport report) {
-                if(!report.areAllPermissionsGranted()){
-                }
-            }
-            @Override public void onPermissionRationaleShouldBeShown(List<com.karumi.dexter.listener.PermissionRequest> permissions, PermissionToken token) {
-                System.out.println("entered");
-                token.continuePermissionRequest();
-            }
-        }).check();*/
 
         String settings = Settings.Secure.getString(this.getContentResolver(),"enabled_notification_listeners");
         if (settings != null && settings.contains(getApplicationContext().getPackageName()))
@@ -195,57 +177,67 @@ private void refreshWifiView(String status,int percent,String percentage,String 
         }
 
         @Override
-        public void onSignalStrengthsChanged(SignalStrength signalStrength) {
+        public void onSignalStrengthsChanged(final SignalStrength signalStrength) {
             super.onSignalStrengthsChanged(signalStrength);
-            try {
-                Thread.sleep(2000);
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-            String status = "Weak";
-            int percent = 0;
-            String percentage = "0%";
-            String operatorName = mTelephonyManager.getNetworkOperatorName();
-            if(mTelephonyManager.getNetworkType() == TelephonyManager.NETWORK_TYPE_GSM){
-                int rsrp = getGSMsignalStrength(signalStrength);
-                if(rsrp < -100){//poor
-                    status = "Weak";
-                    percent = 0;
-                    percentage = "0%";
-                }else if(rsrp < -90 && rsrp >= -100){//fair
-                    status = "Fair";
-                    percent = 30;
-                    percentage = "30%";
-                }else if(rsrp < -80 && rsrp >= -90) {//good
-                    status = "Good";
-                    percent = 75;
-                    percentage = "75%";
-                }else if(rsrp >= -80){// Excellent
-                    status = "Excellent";
-                    percent = 100;
-                    percentage = "100%";
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Thread.sleep(2000);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+
+                    final String operatorName = mTelephonyManager.getNetworkOperatorName();
+                    System.out.println("network tpe = ********* "+mTelephonyManager.getNetworkType());
+                    if(mTelephonyManager.getNetworkType() == TelephonyManager.NETWORK_TYPE_GSM){
+                        int rsrp = getGSMsignalStrength(signalStrength);
+                        if(rsrp < -100){//poor
+                            msgStatus = "Weak";
+                            msgPercent = 0;
+                            msgPercentage = "0%";
+                        }else if(rsrp < -90 && rsrp >= -100){//fair
+                            msgStatus = "Fair";
+                            msgPercent = 30;
+                            msgPercentage = "30%";
+                        }else if(rsrp < -80 && rsrp >= -90) {//good
+                            msgStatus = "Good";
+                            msgPercent = 75;
+                            msgPercentage = "75%";
+                        }else if(rsrp >= -80){// Excellent
+                            msgStatus = "Excellent";
+                            msgPercent = 100;
+                            msgPercentage = "100%";
+                        }
+                    }else if(mTelephonyManager.getNetworkType() == TelephonyManager.NETWORK_TYPE_LTE || mTelephonyManager.getNetworkType() == TelephonyManager.NETWORK_TYPE_UNKNOWN){
+                        int ecio = getLTEsignalStrength(signalStrength);
+                        if(ecio <= -10){//poor
+                            msgStatus = "Weak";
+                            msgPercent = 0;
+                            msgPercentage = "0%";
+                        }else if(ecio < -5 && ecio > -10){//fair
+                            msgStatus = "Fair";
+                            msgPercent = 30;
+                            msgPercentage = "30%";
+                        }else if(ecio <= -2 && ecio >= -5) {//good
+                            msgStatus = "Good";
+                            msgPercent = 75;
+                            msgPercentage = "75%";
+                        }else if(ecio > -2){// excellent
+                            msgStatus = "Excellent";
+                            msgPercent = 100;
+                            msgPercentage = "100%";
+                        }
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            refreshMobileView(msgStatus,msgPercent,msgPercentage,operatorName);
+                        }
+                    });
                 }
-            }else if(mTelephonyManager.getNetworkType() == TelephonyManager.NETWORK_TYPE_LTE){
-                int ecio = getLTEsignalStrength(signalStrength);
-                if(ecio <= -10){//poor
-                    status = "Weak";
-                    percent = 0;
-                    percentage = "0%";
-                }else if(ecio < -5 && ecio > -10){//fair
-                    status = "Fair";
-                    percent = 30;
-                    percentage = "30%";
-                }else if(ecio <= -2 && ecio >= -5) {//good
-                    status = "Good";
-                    percent = 75;
-                    percentage = "75%";
-                }else if(ecio > -2){// excellent
-                    status = "Excellent";
-                    percent = 100;
-                    percentage = "100%";
-                }
-            }
-            refreshMobileView(status,percent,percentage,operatorName);
+            }).start();
+
         }
     }
 
