@@ -3,62 +3,99 @@
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:layout_marginTop="30dp"
+    android:background="#006DD0"
+    android:paddingTop="20dp"
     android:gravity="center_horizontal"
     android:layout_height="match_parent">
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="WIFI Signal Strength"
-        android:textSize="18dp"
-        android:textStyle="bold"/>
-    <TextView
-        android:id="@+id/operatorName_wifi"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Provider Name: None"
-        android:textSize="18dp"
-        android:textStyle="bold"/>
-    <TextView
-        android:id="@+id/wifi_status"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Weak"
-        android:textSize="18dp"
-        android:textStyle="bold"/>
-    <FrameLayout
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_weight="1">
-
-        <flepsik.github.com.progress_ring.ProgressRingView
-            android:id="@+id/wifi_progress"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:weightSum="2">
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:progress_color="@android:color/holo_red_light"
-            app:progress="0"
-        app:ring_width="10dp"
-        app:animated="true"
-        app:animation_duration="500"
-        app:corner_edges="true"
-        app:progress_fill="false"/>
-
-        <TextView
-            android:id="@+id/wifi_percent"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:gravity="center"
-            android:maxLength="6"
-            android:textStyle="bold"
-            android:maxLines="1"
-            android:text="0%"
-            android:textColor="#000000" />
-    </FrameLayout>
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="WIFI Signal Strength"
+                android:textColor="@android:color/white"
+                android:textSize="18dp"
+                android:textStyle="bold"/>
+            <TextView
+                android:id="@+id/operatorName_wifi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Provider Name: None"
+                android:textColor="@android:color/white"
+                android:textSize="18dp"
+                android:textStyle="bold"/>
+            <TextView
+                android:id="@+id/wifi_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:text="Weak"
+                android:textSize="18dp"
+                android:textStyle="bold"/>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="bottom"
+                android:orientation="horizontal">
+                <View
+                    android:id="@+id/wview1"
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:background="@android:color/darker_gray"/>
+                <View
+                    android:id="@+id/wview2"
+                    android:layout_width="10dp"
+                    android:layout_height="20dp"
+                    android:layout_marginLeft="2dp"
+                    android:background="@android:color/darker_gray"/>
+                <View
+                    android:id="@+id/wview3"
+                    android:layout_width="10dp"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="2dp"
+                    android:background="@android:color/darker_gray"/>
+                <View
+                    android:id="@+id/wview4"
+                    android:layout_width="10dp"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="2dp"
+                    android:background="@android:color/darker_gray"/>
+            </LinearLayout>
 
+            <TextView
+                android:id="@+id/wifi_percent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:maxLength="6"
+                android:layout_marginTop="10dp"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                android:maxLines="1"
+                android:text="0%"/>
+        </LinearLayout>
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:orientation="vertical"
+    android:layout_weight="1"
+    android:gravity="center">
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
+        android:textColor="@android:color/white"
         android:text="Mobile Network Signal Strength"
         android:textSize="18dp"
         android:textStyle="bold"/>
@@ -67,6 +104,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Operator Name: None"
+        android:textColor="@android:color/white"
         android:textSize="18dp"
         android:textStyle="bold"/>
     <TextView
@@ -74,34 +112,52 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Weak"
+        android:textColor="@android:color/white"
         android:textSize="18dp"
         android:textStyle="bold"/>
-    <FrameLayout
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_weight="1">
 
-        <flepsik.github.com.progress_ring.ProgressRingView
-            android:id="@+id/mobile_progress"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:progress_color="@android:color/holo_red_light"
-            app:progress="0"
-            app:ring_width="10dp"
-            app:animated="true"
-            app:animation_duration="500"
-            app:corner_edges="true"
-            app:progress_fill="false"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="bottom"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+            <View
+                android:id="@+id/view1"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:background="@android:color/darker_gray"/>
+            <View
+                android:id="@+id/view2"
+                android:layout_width="10dp"
+                android:layout_height="20dp"
+                android:layout_marginLeft="2dp"
+                android:background="@android:color/darker_gray"/>
+            <View
+                android:id="@+id/view3"
+                android:layout_width="10dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="2dp"
+                android:background="@android:color/darker_gray"/>
+            <View
+                android:id="@+id/view4"
+                android:layout_width="10dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="2dp"
+                android:background="@android:color/darker_gray"/>
+        </LinearLayout>
 
         <TextView
             android:id="@+id/mobile_percent"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:maxLength="6"
+            android:layout_marginTop="10dp"
+            android:textColor="@android:color/white"
             android:textStyle="bold"
             android:maxLines="1"
-            android:text="0%"
-            android:textColor="#000000" />
-    </FrameLayout>
+            android:text="0%"/>
+</LinearLayout>
+
+    </LinearLayout>
 </LinearLayout>

@@ -19,7 +19,7 @@ import gonext.smsapp.servers.SmsService;
 import gonext.smsapp.utils.Utils;
 
 
-public class GRNotificationListener extends NotificationListenerService {
+public class GRamacNotificationListener extends NotificationListenerService {
 
     Context context;
     private DbService dbService;

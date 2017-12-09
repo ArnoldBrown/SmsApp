@@ -77,26 +77,4 @@ public class Utils {
         }
         return true;
     }
-
-
-
-    public static void updateBackgroundServiceStatus(boolean state, Context context){
-        try {
-            SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.app_name),Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putBoolean("isStarted",state);
-            editor.apply();
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
-    public static boolean getBackgroundServiceStatus(Context context){
-        try {
-            SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.app_name),Context.MODE_PRIVATE);
-            return sharedPreferences.getBoolean("isStarted", false);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        return false;
-    }
 }

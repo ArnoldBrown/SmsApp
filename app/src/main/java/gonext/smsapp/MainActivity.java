@@ -21,6 +21,9 @@ import android.telephony.PhoneStateListener;
 import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.webkit.PermissionRequest;
 import android.widget.TextView;
@@ -43,13 +46,15 @@ import static android.telephony.PhoneStateListener.LISTEN_NONE;
 public class MainActivity extends AppCompatActivity {
 
     private TextView wifiStatus,wifiPercent,mobileStatus,mobilePercent,operatorNameMobile,operatorNameWifi;
-    private ProgressRingView mobileRing,wifiRing;
     private BroadcastReceiver wifiReceiver;
     private MobileNetworkListener mPhoneStatelistener;
     private TelephonyManager mTelephonyManager;
     private int PERMISSION_FLAG = 2000;
     private String msgStatus = "Weak";
    private int msgPercent = 0;
+   private View view1,view2,view3,view4,wview1,wview2,wview3,wview4;
+   private int msgLevel = 1;
+ private int wifiLevel = 1;
     private String msgPercentage = "0%";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,8 +68,16 @@ public class MainActivity extends AppCompatActivity {
         operatorNameMobile = (TextView) findViewById(R.id.operatorName_mobile);
         operatorNameWifi = (TextView) findViewById(R.id.operatorName_wifi);
 
-        mobileRing = (ProgressRingView) findViewById(R.id.mobile_progress);
-        wifiRing = (ProgressRingView) findViewById(R.id.wifi_progress);
+        view1 = findViewById(R.id.view1);
+        view2 = findViewById(R.id.view2);
+        view3 = findViewById(R.id.view3);
+        view4 = findViewById(R.id.view4);
+
+        wview1 = findViewById(R.id.wview1);
+        wview2 = findViewById(R.id.wview2);
+        wview3 = findViewById(R.id.wview3);
+        wview4 = findViewById(R.id.wview4);
+
 
 
 
@@ -82,9 +95,7 @@ public class MainActivity extends AppCompatActivity {
         /*PackageManager p = getPackageManager();
         ComponentName componentName = new ComponentName(this, MainActivity.class); // activity which is first time open in manifiest file which is declare as <category android:name="android.intent.category.LAUNCHER" />
         p.setComponentEnabledSetting(componentName,PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);*/
-        if(!Utils.getBackgroundServiceStatus(this)) {
             startService(new Intent(this, BackgroundJob.class)); //start service which is BackgroundJob.java
-        }
         initializeWiFiListener();
         initialMobileNetworkListener();
     }
@@ -118,52 +129,98 @@ public class MainActivity extends AppCompatActivity {
 //                int percentage = (int) ((level/10.0)*100);
                 String status = "Weak";
                 int percent = 0;
+                wifiLevel = 1;
                 String percentage = "0%";
                 if(level == 0){//weak
                     if(rssi > -100) {
                         status = "Weak";
                         percent = 33;
                         percentage = "0-33%";
+                        wifiLevel = 2;
                     }
                 }else if(level == 1){//avg
                     status = "Average";
                     percent = 66;
+                    wifiLevel = 3;
                     percentage = "33-66%";
                 }else if(level == 2){//good
                     status = "Excellent";
                     percent = 100;
+                    wifiLevel = 4;
                     percentage = "100%";
                 }
-                refreshWifiView(status,percent,percentage,operatorName);
+                refreshWifiView(status,percent,percentage,operatorName,wifiLevel);
             }
             //TODO: implement methods for action handling
 
         };
         registerReceiver(wifiReceiver, intentFilter);
     }
-private void refreshWifiView(String status,int percent,String percentage,String operatorName){
+private void refreshWifiView(String status,int percent,String percentage,String operatorName, int wifiLevel){
         wifiStatus.setText(status);
         wifiPercent.setText(percentage);
-        wifiRing.setProgress(percent/100);
+
+    wview1.setBackgroundColor(ContextCompat.getColor(this,android.R.color.darker_gray));
+    wview2.setBackgroundColor(ContextCompat.getColor(this,android.R.color.darker_gray));
+    wview3.setBackgroundColor(ContextCompat.getColor(this,android.R.color.darker_gray));
+    wview4.setBackgroundColor(ContextCompat.getColor(this,android.R.color.darker_gray));
+    if(msgLevel == 1){
+        wview1.setBackgroundColor(ContextCompat.getColor(this,android.R.color.white));
+    }else if(msgLevel == 2){
+        wview1.setBackgroundColor(ContextCompat.getColor(this,android.R.color.white));
+        wview2.setBackgroundColor(ContextCompat.getColor(this,android.R.color.white));
+    }else if(msgLevel == 3){
+        wview1.setBackgroundColor(ContextCompat.getColor(this,android.R.color.white));
+        wview2.setBackgroundColor(ContextCompat.getColor(this,android.R.color.white));
+        wview3.setBackgroundColor(ContextCompat.getColor(this,android.R.color.white));
+
+    }else if(msgLevel == 4){
+        wview1.setBackgroundColor(ContextCompat.getColor(this,android.R.color.white));
+        wview2.setBackgroundColor(ContextCompat.getColor(this,android.R.color.white));
+        wview3.setBackgroundColor(ContextCompat.getColor(this,android.R.color.white));
+        wview4.setBackgroundColor(ContextCompat.getColor(this,android.R.color.white));
+    }
+
+//        wifiRing.setProgress(percent/100);
         if(status.equals("Weak")){
-            wifiRing.setProgressColor(ContextCompat.getColor(this,android.R.color.holo_red_light));
+//            wifiRing.setProgressColor(ContextCompat.getColor(this,android.R.color.holo_red_light));
         }else if(status.equals("Average")){
-            wifiRing.setProgressColor(ContextCompat.getColor(this,R.color.yellow));
+//            wifiRing.setProgressColor(ContextCompat.getColor(this,R.color.yellow));
         }else if(status.equals("Excellent")){
-            wifiRing.setProgressColor(ContextCompat.getColor(this,android.R.color.holo_green_light));
+//            wifiRing.setProgressColor(ContextCompat.getColor(this,android.R.color.holo_green_light));
         }
         operatorNameWifi.setText("Provider Name: "+operatorName);
 }
-    private void refreshMobileView(String status,int percent,String percentage,String operatorName){
+    private void refreshMobileView(String status,int percent,String percentage,String operatorName,int msgLevel){
         mobileStatus.setText(status);
         mobilePercent.setText(percentage);
-        mobileRing.setProgress(percent/100);
+        view1.setBackgroundColor(ContextCompat.getColor(this,android.R.color.darker_gray));
+        view2.setBackgroundColor(ContextCompat.getColor(this,android.R.color.darker_gray));
+        view3.setBackgroundColor(ContextCompat.getColor(this,android.R.color.darker_gray));
+        view4.setBackgroundColor(ContextCompat.getColor(this,android.R.color.darker_gray));
+        if(msgLevel == 1){
+            view1.setBackgroundColor(ContextCompat.getColor(this,android.R.color.white));
+        }else if(msgLevel == 2){
+            view1.setBackgroundColor(ContextCompat.getColor(this,android.R.color.white));
+            view2.setBackgroundColor(ContextCompat.getColor(this,android.R.color.white));
+        }else if(msgLevel == 3){
+            view1.setBackgroundColor(ContextCompat.getColor(this,android.R.color.white));
+            view2.setBackgroundColor(ContextCompat.getColor(this,android.R.color.white));
+            view3.setBackgroundColor(ContextCompat.getColor(this,android.R.color.white));
+
+        }else if(msgLevel == 4){
+            view1.setBackgroundColor(ContextCompat.getColor(this,android.R.color.white));
+            view2.setBackgroundColor(ContextCompat.getColor(this,android.R.color.white));
+            view3.setBackgroundColor(ContextCompat.getColor(this,android.R.color.white));
+            view4.setBackgroundColor(ContextCompat.getColor(this,android.R.color.white));
+        }
+//        mobileRing.setProgress(percent/100);
         if(status.equals("Weak")){
-            mobileRing.setProgressColor(ContextCompat.getColor(this,android.R.color.holo_red_light));
+//            mobileRing.setProgressColor(ContextCompat.getColor(this,android.R.color.holo_red_light));
         }else if(status.equals("Fair") || status.equals("Good")){
-            mobileRing.setProgressColor(ContextCompat.getColor(this,R.color.yellow));
+//            mobileRing.setProgressColor(ContextCompat.getColor(this,R.color.yellow));
         }else if(status.equals("Excellent")){
-            mobileRing.setProgressColor(ContextCompat.getColor(this,android.R.color.holo_green_light));
+//            mobileRing.setProgressColor(ContextCompat.getColor(this,android.R.color.holo_green_light));
         }
         operatorNameMobile.setText("Operator Name: "+operatorName);
     }
@@ -189,24 +246,27 @@ private void refreshWifiView(String status,int percent,String percentage,String 
                     }
 
                     final String operatorName = mTelephonyManager.getNetworkOperatorName();
-                    System.out.println("network tpe = ********* "+mTelephonyManager.getNetworkType());
                     if(mTelephonyManager.getNetworkType() == TelephonyManager.NETWORK_TYPE_GSM){
                         int rsrp = getGSMsignalStrength(signalStrength);
                         if(rsrp < -100){//poor
                             msgStatus = "Weak";
                             msgPercent = 0;
+                            msgLevel = 1;
                             msgPercentage = "0%";
                         }else if(rsrp < -90 && rsrp >= -100){//fair
                             msgStatus = "Fair";
                             msgPercent = 30;
+                            msgLevel = 2;
                             msgPercentage = "30%";
                         }else if(rsrp < -80 && rsrp >= -90) {//good
                             msgStatus = "Good";
                             msgPercent = 75;
+                            msgLevel = 3;
                             msgPercentage = "75%";
                         }else if(rsrp >= -80){// Excellent
                             msgStatus = "Excellent";
                             msgPercent = 100;
+                            msgLevel = 4;
                             msgPercentage = "100%";
                         }
                     }else if(mTelephonyManager.getNetworkType() == TelephonyManager.NETWORK_TYPE_LTE || mTelephonyManager.getNetworkType() == TelephonyManager.NETWORK_TYPE_UNKNOWN){
@@ -214,25 +274,29 @@ private void refreshWifiView(String status,int percent,String percentage,String 
                         if(ecio <= -10){//poor
                             msgStatus = "Weak";
                             msgPercent = 0;
+                            msgLevel = 1;
                             msgPercentage = "0%";
                         }else if(ecio < -5 && ecio > -10){//fair
                             msgStatus = "Fair";
                             msgPercent = 30;
+                            msgLevel = 2;
                             msgPercentage = "30%";
                         }else if(ecio <= -2 && ecio >= -5) {//good
                             msgStatus = "Good";
                             msgPercent = 75;
+                            msgLevel = 3;
                             msgPercentage = "75%";
                         }else if(ecio > -2){// excellent
                             msgStatus = "Excellent";
                             msgPercent = 100;
+                            msgLevel = 4;
                             msgPercentage = "100%";
                         }
                     }
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            refreshMobileView(msgStatus,msgPercent,msgPercentage,operatorName);
+                            refreshMobileView(msgStatus,msgPercent,msgPercentage,operatorName,msgLevel);
                         }
                     });
                 }
@@ -382,5 +446,21 @@ private void refreshWifiView(String status,int percent,String percentage,String 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == R.id.about){
+            Intent intent = new Intent(this,AboutActivity.class);
+            startActivity(intent);
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

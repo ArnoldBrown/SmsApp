@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Check Network</string>
+    <string name="title_activity_about">About Us</string>
+    <string name="version_name">1.0</string>
 </resources>
