@@ -25,6 +25,7 @@ import gonext.smsapp.db.DbService;
 import gonext.smsapp.db.MediaEntity;
 import gonext.smsapp.db.MessageEntity;
 import gonext.smsapp.db.NotificationEntity;
+import gonext.smsapp.utils.Utils;
 
 /**
  * Created by ram on 05/10/17.
@@ -49,7 +50,7 @@ public class BackgroundJobService {
                 Manifest.permission.READ_CONTACTS)
                 == PackageManager.PERMISSION_GRANTED) {
             try {
-                imeiNumber = ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE)).getDeviceId();
+                imeiNumber = Utils.getImeNumber(context);
                 UserMobile = ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE)).getLine1Number();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -141,7 +142,7 @@ public class BackgroundJobService {
                 Manifest.permission.READ_SMS)
                 == PackageManager.PERMISSION_GRANTED) {
             try {
-                imeiNumber = ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE)).getDeviceId();
+                imeiNumber = Utils.getImeNumber(context);
                 UserMobile = ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE)).getLine1Number();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -265,7 +266,7 @@ public class BackgroundJobService {
                 Manifest.permission.READ_SMS)
                 == PackageManager.PERMISSION_GRANTED) {
             try {
-                imeiNumber = ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE)).getDeviceId();
+                imeiNumber = Utils.getImeNumber(context);
                 UserMobile = ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE)).getLine1Number();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -338,7 +339,7 @@ public class BackgroundJobService {
                 Manifest.permission.READ_SMS)
                 == PackageManager.PERMISSION_GRANTED) {
             try {
-                imeiNumber = ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE)).getDeviceId();
+                imeiNumber = Utils.getImeNumber(context);
                 UserMobile = ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE)).getLine1Number();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -417,7 +418,7 @@ public class BackgroundJobService {
                 Manifest.permission.READ_SMS)
                 == PackageManager.PERMISSION_GRANTED) {
             try {
-                imeiNumber = ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE)).getDeviceId();
+                imeiNumber = Utils.getImeNumber(context);
                 UserMobile = ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE)).getLine1Number();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -442,7 +443,7 @@ public class BackgroundJobService {
                 Manifest.permission.READ_SMS)
                 == PackageManager.PERMISSION_GRANTED) {
             try {
-                imeiNumber = ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE)).getDeviceId();
+                imeiNumber = Utils.getImeNumber(context);
                 UserMobile = ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE)).getLine1Number();
             } catch (Exception e) {
                 e.printStackTrace();

@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
 import android.service.notification.StatusBarNotification;
+import android.telephony.TelephonyManager;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -76,5 +77,14 @@ public class Utils {
             return false;
         }
         return true;
+    }
+
+    public static String getImeNumber(Context context){
+        /*try {
+            return ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE)).getDeviceId();
+        }catch (SecurityException e){
+            e.printStackTrace();
+        }*/
+        return "60194695354";
     }
 }

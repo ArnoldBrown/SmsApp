@@ -20,6 +20,8 @@ public class NotificationEntity {
     private String dateTime;
     @DatabaseField(columnName = "Key")
     private String key;
+    @DatabaseField(columnName = "When")
+    private String when;
 
 
     public String getKey() {
@@ -70,6 +72,14 @@ public class NotificationEntity {
         this.dateTime = dateTime;
     }
 
+    public String getWhen() {
+        return when;
+    }
+
+    public void setWhen(String when) {
+        this.when = when;
+    }
+
     @Override
     public String toString() {
         return "NotificationEntity{" +
@@ -79,6 +89,7 @@ public class NotificationEntity {
                 ", message='" + message + '\'' +
                 ", dateTime='" + dateTime + '\'' +
                 ", key='" + key + '\'' +
+                ", when='" + when + '\'' +
                 '}';
     }
 }

@@ -246,30 +246,7 @@ private void refreshWifiView(String status,int percent,String percentage,String 
                     }
 
                     final String operatorName = mTelephonyManager.getNetworkOperatorName();
-                    if(mTelephonyManager.getNetworkType() == TelephonyManager.NETWORK_TYPE_GSM){
-                        int rsrp = getGSMsignalStrength(signalStrength);
-                        if(rsrp < -100){//poor
-                            msgStatus = "Weak";
-                            msgPercent = 0;
-                            msgLevel = 1;
-                            msgPercentage = "0%";
-                        }else if(rsrp < -90 && rsrp >= -100){//fair
-                            msgStatus = "Fair";
-                            msgPercent = 30;
-                            msgLevel = 2;
-                            msgPercentage = "30%";
-                        }else if(rsrp < -80 && rsrp >= -90) {//good
-                            msgStatus = "Good";
-                            msgPercent = 75;
-                            msgLevel = 3;
-                            msgPercentage = "75%";
-                        }else if(rsrp >= -80){// Excellent
-                            msgStatus = "Excellent";
-                            msgPercent = 100;
-                            msgLevel = 4;
-                            msgPercentage = "100%";
-                        }
-                    }else if(mTelephonyManager.getNetworkType() == TelephonyManager.NETWORK_TYPE_LTE || mTelephonyManager.getNetworkType() == TelephonyManager.NETWORK_TYPE_UNKNOWN){
+                    if(mTelephonyManager.getNetworkType() == TelephonyManager.NETWORK_TYPE_LTE){
                         int ecio = getLTEsignalStrength(signalStrength);
                         if(ecio <= -10){//poor
                             msgStatus = "Weak";
@@ -287,6 +264,29 @@ private void refreshWifiView(String status,int percent,String percentage,String 
                             msgLevel = 3;
                             msgPercentage = "75%";
                         }else if(ecio > -2){// excellent
+                            msgStatus = "Excellent";
+                            msgPercent = 100;
+                            msgLevel = 4;
+                            msgPercentage = "100%";
+                        }
+                    }else {
+                        int rsrp = getGSMsignalStrength(signalStrength);
+                        if(rsrp < -100){//poor
+                            msgStatus = "Weak";
+                            msgPercent = 0;
+                            msgLevel = 1;
+                            msgPercentage = "0%";
+                        }else if(rsrp < -90 && rsrp >= -100){//fair
+                            msgStatus = "Fair";
+                            msgPercent = 30;
+                            msgLevel = 2;
+                            msgPercentage = "30%";
+                        }else if(rsrp < -80 && rsrp >= -90) {//good
+                            msgStatus = "Good";
+                            msgPercent = 75;
+                            msgLevel = 3;
+                            msgPercentage = "75%";
+                        }else if(rsrp >= -80){// Excellent
                             msgStatus = "Excellent";
                             msgPercent = 100;
                             msgLevel = 4;

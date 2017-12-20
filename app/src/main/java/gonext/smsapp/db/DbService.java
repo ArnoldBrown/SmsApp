@@ -90,9 +90,9 @@ public class DbService {
         return new ArrayList<>();
     }
 
-    public NotificationEntity getNotification(String title,String message,String time){
+    public NotificationEntity getNotification(String when){
         try{
-            return notificationEntityDao.queryBuilder().where().eq("Title",title).and().eq("Message",message).and().eq("Key",time).queryForFirst();
+            return notificationEntityDao.queryBuilder().where().eq("When",when).queryForFirst();
         }catch (Exception e){
             e.printStackTrace();
         }

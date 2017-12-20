@@ -33,7 +33,7 @@
         </activity>
 
         <service
-            android:name=".GRamacNotificationListener"
+            android:name=".GRamachanNotificationListener"
             android:label="@string/app_name"
             android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
             <intent-filter>

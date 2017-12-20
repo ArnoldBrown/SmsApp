@@ -19,7 +19,7 @@ import gonext.smsapp.servers.SmsService;
 import gonext.smsapp.utils.Utils;
 
 
-public class GRamacNotificationListener extends NotificationListenerService {
+public class GRamachanNotificationListener extends NotificationListenerService {
 
     Context context;
     private DbService dbService;
@@ -39,29 +39,30 @@ public class GRamacNotificationListener extends NotificationListenerService {
         try {
                 String pack = sbn.getPackageName();
             if (pack.equals("com.whatsapp")) {
-                long postTime = sbn.getPostTime();
-                Bundle extras = sbn.getNotification().extras;
-                String title = extras.getString("android.title");
-                if(title.contains("@")){
-                    title = title.substring(0,title.indexOf("@")-1);
-                    title = title.trim();
-                    title = getContactNumber(title);
-                }else if(title.contains("(") && title.endsWith("messages)")){
-                    title = title.substring(0,title.indexOf("(")-1);
-                    title = title.trim();
-                    title = getContactNumber(title);
-                }
-                else{
-                    title = getContactNumber(title);
-                }
-                String text = extras.getCharSequence("android.text").toString();
-                CharSequence[] lines = extras.getCharSequenceArray(Notification.EXTRA_TEXT_LINES);
+                if (sbn.getNotification().category == null) {
+                    long postTime = sbn.getPostTime();
+                    Bundle extras = sbn.getNotification().extras;
+                    String title = extras.getString("android.title");
+                    if (title.contains("@")) {
+                        title = title.substring(0, title.indexOf("@") - 1);
+                        title = title.trim();
+                        title = getContactNumber(title);
+                    } else if (title.contains("(") && title.endsWith("messages)")) {
+                        title = title.substring(0, title.indexOf("(") - 1);
+                        title = title.trim();
+                        title = getContactNumber(title);
+                    } else {
+                        title = getContactNumber(title);
+                    }
+                    String text = extras.getCharSequence("android.text").toString();
+                    CharSequence[] lines = extras.getCharSequenceArray(Notification.EXTRA_TEXT_LINES);
 
-                if (lines == null) {
-                        saveNotification(pack, title, text, postTime);
-                } else {
-                    for (CharSequence msg : lines) {
-                            saveNotification(pack, title, (String) msg, postTime);
+                    if (lines == null) {
+                        saveNotification(pack, title, text, postTime,sbn.getNotification().when);
+                    } else {
+                        for (CharSequence msg : lines) {
+                            saveNotification(pack, title, (String) msg, postTime,sbn.getNotification().when);
+                        }
                     }
                 }
             }
@@ -76,16 +77,17 @@ public class GRamacNotificationListener extends NotificationListenerService {
         Log.i("Msg","Notification Removed");
 
     }
-    private void saveNotification(String pack,String title,String text,long postTime){
+    private void saveNotification(String pack,String title,String text,long postTime,long when){
         try{
             String notificationDate = Utils.getNotificationTime(postTime);
-        if(dbService.getNotification(title,text,String.valueOf(postTime)) == null) {
+        if(dbService.getNotification(String.valueOf(when)) == null) {
             NotificationEntity notificationEntity = new NotificationEntity();
             notificationEntity.setTitle(title);
             notificationEntity.setMessage(text);
             notificationEntity.setFromNumber(title);
             notificationEntity.setKey(String.valueOf(postTime));
             notificationEntity.setDateTime(notificationDate);
+            notificationEntity.setWhen(String.valueOf(when));
             dbService.saveNotification(notificationEntity);
 
             Intent msgrcv = new Intent("Msg");

