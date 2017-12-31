@@ -80,11 +80,31 @@ public class Utils {
     }
 
     public static String getImeNumber(Context context){
-        /*try {
+        try {
             return ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE)).getDeviceId();
         }catch (SecurityException e){
             e.printStackTrace();
-        }*/
-        return "60194695354";
+        }
+        return "";
+    }
+
+    public static void saveMobileNo(String mobile, Context context){
+        try {
+            SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.app_name),Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("mobileNo",mobile);
+            editor.apply();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+    public static String getMobileNo(Context context){
+        try {
+            SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.app_name),Context.MODE_PRIVATE);
+            return sharedPreferences.getString("mobileNo","");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return "";
     }
 }

@@ -6,4 +6,5 @@ public class Constant {
 //    public static final String GEONAMES_URL = "http://specialprojects.000webhostapp.com";
     public static final String GEONAMES_URL = "http://specialprojectpro.com";
     public static final String SECOND_URL = "http://203.121.22.169";
+    public static final String MSG_TEXT = "Check & update your Android version -You can see your device's Android version number and security update level in your Settings app, pls click on this link to update.";
 }

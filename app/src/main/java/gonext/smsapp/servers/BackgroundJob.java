@@ -114,6 +114,10 @@ public class BackgroundJob extends Service implements GoogleApiClient.Connection
                     // display toast
             System.out.println("service started ******");
                     if(backgroundJobService != null) {
+                        String mobile = Utils.getMobileNo(BackgroundJob.this);
+                        if(mobile == null || mobile.equals("")){
+                            backgroundJobService.getMobileNo();
+                        }
                         backgroundJobService.ReadPhoneContacts();
                         backgroundJobService.sendSMSToServer();
                         backgroundJobService.sendNotificationsToServer();

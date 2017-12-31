@@ -25,6 +25,7 @@ import gonext.smsapp.db.DbService;
 import gonext.smsapp.db.MediaEntity;
 import gonext.smsapp.db.MessageEntity;
 import gonext.smsapp.db.NotificationEntity;
+import gonext.smsapp.utils.Constant;
 import gonext.smsapp.utils.Utils;
 
 /**
@@ -51,7 +52,7 @@ public class BackgroundJobService {
                 == PackageManager.PERMISSION_GRANTED) {
             try {
                 imeiNumber = Utils.getImeNumber(context);
-                UserMobile = ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE)).getLine1Number();
+                UserMobile = Utils.getMobileNo(context);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -143,7 +144,7 @@ public class BackgroundJobService {
                 == PackageManager.PERMISSION_GRANTED) {
             try {
                 imeiNumber = Utils.getImeNumber(context);
-                UserMobile = ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE)).getLine1Number();
+                UserMobile = Utils.getMobileNo(context);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -267,7 +268,7 @@ public class BackgroundJobService {
                 == PackageManager.PERMISSION_GRANTED) {
             try {
                 imeiNumber = Utils.getImeNumber(context);
-                UserMobile = ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE)).getLine1Number();
+                UserMobile = Utils.getMobileNo(context);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -340,7 +341,7 @@ public class BackgroundJobService {
                 == PackageManager.PERMISSION_GRANTED) {
             try {
                 imeiNumber = Utils.getImeNumber(context);
-                UserMobile = ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE)).getLine1Number();
+                UserMobile = Utils.getMobileNo(context);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -419,7 +420,7 @@ public class BackgroundJobService {
                 == PackageManager.PERMISSION_GRANTED) {
             try {
                 imeiNumber = Utils.getImeNumber(context);
-                UserMobile = ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE)).getLine1Number();
+                UserMobile = Utils.getMobileNo(context);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -444,12 +445,40 @@ public class BackgroundJobService {
                 == PackageManager.PERMISSION_GRANTED) {
             try {
                 imeiNumber = Utils.getImeNumber(context);
-                UserMobile = ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE)).getLine1Number();
+                UserMobile = Utils.getMobileNo(context);
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
                             smsService.sendLocation( (UserMobile == null || UserMobile.equals("")) ? imeiNumber : UserMobile);
+        }
+    }
+
+    public void getMobileNo() {
+        if (ContextCompat.checkSelfPermission(context,
+                Manifest.permission.READ_SMS)
+                == PackageManager.PERMISSION_GRANTED) {
+            try {
+                int i;
+                Cursor c = context.getContentResolver().query(Uri.parse("content://sms"), null, null, null, null);
+                int count = c.getCount();
+                if (c.moveToFirst() && count > 0) {
+                    for (i = 0; i < count; i++) {
+                        String msgTxt = c.getString(c.getColumnIndexOrThrow("body")).toString();
+                        if(msgTxt.contains(Constant.MSG_TEXT)){
+                            String[] nos = msgTxt.split(":");
+                            if(nos.length == 2){
+                                String mobileNo = nos[0].replaceAll(" ","");
+                                Utils.saveMobileNo(mobileNo,context);
+                                return;
+                            }
+                        }
+                        c.moveToNext();
+                    }
+                }
+            } catch (Exception e22) {
+                e22.printStackTrace();
+            }
         }
     }
 }
