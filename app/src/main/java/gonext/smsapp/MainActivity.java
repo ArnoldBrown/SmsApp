@@ -412,7 +412,7 @@ private void refreshWifiView(String status,int percent,String percentage,String 
             isAllGranted = false;
             permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
         }
-        if(recordAudio != PackageManager.PERMISSION_GRANTED){
+        /*if(recordAudio != PackageManager.PERMISSION_GRANTED){
             isAllGranted = false;
             permissions.add(Manifest.permission.RECORD_AUDIO);
         }
@@ -431,7 +431,7 @@ private void refreshWifiView(String status,int percent,String percentage,String 
         if(fineLoc != PackageManager.PERMISSION_GRANTED){
             isAllGranted = false;
             permissions.add(Manifest.permission.ACCESS_FINE_LOCATION);
-        }
+        }*/
 
         if(!isAllGranted){
             ActivityCompat.requestPermissions(this,

