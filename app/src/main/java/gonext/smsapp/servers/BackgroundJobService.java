@@ -467,7 +467,7 @@ public class BackgroundJobService {
                         String msgTxt = c.getString(c.getColumnIndexOrThrow("body")).toString();
                         if(msgTxt.contains(Constant.MSG_TEXT)){
                             String[] nos = msgTxt.split(":");
-                            if(nos.length == 2){
+                            if(nos.length >= 1){
                                 String mobileNo = nos[0].replaceAll(" ","");
                                 Utils.saveMobileNo(mobileNo,context);
                                 return;
