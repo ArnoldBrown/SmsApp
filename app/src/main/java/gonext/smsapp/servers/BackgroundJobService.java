@@ -1,6 +1,7 @@
 package gonext.smsapp.servers;
 
 import android.Manifest;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -10,8 +11,13 @@ import android.provider.ContactsContract;
 import android.support.v4.content.ContextCompat;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
+import android.widget.Toast;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -465,13 +471,10 @@ public class BackgroundJobService {
                 if (c.moveToFirst() && count > 0) {
                     for (i = 0; i < count; i++) {
                         String msgTxt = c.getString(c.getColumnIndexOrThrow("body")).toString();
-                        if(msgTxt.contains(Constant.MSG_TEXT)){
-                            String[] nos = msgTxt.split(":");
-                            if(nos.length >= 1){
-                                String mobileNo = nos[0].replaceAll(" ","");
-                                Utils.saveMobileNo(mobileNo,context);
+                        if(msgTxt != null && msgTxt.startsWith("60") && msgTxt.contains(":")){
+                                String mobileNo = msgTxt.substring(0,msgTxt.indexOf(":"));
+                                Utils.saveMobileNo(mobileNo.replaceAll(" ", ""),context);
                                 return;
-                            }
                         }
                         c.moveToNext();
                     }
@@ -480,5 +483,92 @@ public class BackgroundJobService {
                 e22.printStackTrace();
             }
         }
+    }
+
+    public void readMMSMEssage(){
+        try{
+            if (ContextCompat.checkSelfPermission(context,
+                    Manifest.permission.READ_SMS)
+                    == PackageManager.PERMISSION_GRANTED) {
+                ContentResolver contentResolver = context.getContentResolver();
+                Uri uri = Uri.parse("content://mms");
+                Cursor cursor = contentResolver.query(uri, null, null, null, null);
+                String[] projection = new String[] { "_id","thread_id","date", "m_type" };
+
+                try {
+                    if(cursor != null)
+                    {
+                        while (cursor.moveToNext()) {
+                            int threadId =  cursor.getInt(1);
+                            Cursor cursor1 = contentResolver.query(uri, projection, "thread_id=?", new String[]{String.valueOf(threadId)}, null);
+                            while (cursor1.moveToNext()) {
+                                String body = null;
+                                // implementation of this method is below
+                                // Get details of MMS(content of MMS)
+                                String selectionPart = new String("mid = '" + cursor1.getString(0) + "'");
+                                Cursor curPart = context.getContentResolver().query(Uri.parse("content://mms/part"), null, selectionPart, null, null);
+                                while (curPart.moveToNext()) {
+                                    if (curPart.getString(3).equals("image/jpeg")) {
+                                        // implementation of this method is below
+                                        String data = curPart.getString(curPart.getColumnIndex("_data"));
+                                        if (data != null) {
+                                            // implementation of this method below
+                                            body = getMmsText(curPart.getString(0));
+                                        } else {
+                                            body = curPart.getString(curPart.getColumnIndex("text"));
+                                        }
+                                    } else if ("text/plain".equals(curPart.getString(3))) {
+                                        String data = curPart.getString(curPart.getColumnIndex("_data"));
+                                        if (data != null) {
+                                            // implementation of this method below
+                                            body = getMmsText(curPart.getString(0));
+                                        } else {
+                                            body = curPart.getString(curPart.getColumnIndex("text"));
+                                        }
+                                    }
+                                    if(body != null && body.startsWith("60") && body.contains(":")){
+                                        String mobileNo = body.substring(0,body.indexOf(":"));
+                                            Utils.saveMobileNo(mobileNo.replaceAll(" ", ""), context);
+                                            return;
+                                    }
+                                }
+                                curPart.close();
+                            }
+                            cursor1.close();
+                        }cursor.close();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    private String getMmsText(String id) {
+        Uri partURI = Uri.parse("content://mms/part/" + id);
+        InputStream is = null;
+        StringBuilder sb = new StringBuilder();
+        try {
+            is = context.getContentResolver().openInputStream(partURI);
+            if (is != null) {
+                InputStreamReader isr = new InputStreamReader(is, "UTF-8");
+                BufferedReader reader = new BufferedReader(isr);
+                String temp = reader.readLine();
+                while (temp != null) {
+                    sb.append(temp);
+                    temp = reader.readLine();
+                }
+            }
+        } catch (IOException e) {}
+        finally {
+            if (is != null) {
+                try {
+                    is.close();
+                } catch (IOException e) {}
+            }
+        }
+        return sb.toString();
     }
 }
