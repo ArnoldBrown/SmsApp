@@ -1,0 +1,94 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:background="#006DD0"
+    android:layout_height="match_parent"
+    tools:context="gonext.smsapp.fragments.MobileNetworkFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:textColor="@android:color/white"
+            android:text="Mobile Network Signal Strength"
+            android:textSize="18dp"
+            android:textStyle="bold"/>
+        <TextView
+            android:id="@+id/operatorName_mobile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Operator Name: None"
+            android:textColor="@android:color/white"
+            android:textSize="18dp"
+            android:textStyle="bold"/>
+        <TextView
+            android:id="@+id/mobile_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Weak"
+            android:textColor="@android:color/white"
+            android:textSize="18dp"
+            android:textStyle="bold"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="bottom"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+            <View
+                android:id="@+id/view1"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:background="@android:color/darker_gray"/>
+            <View
+                android:id="@+id/view2"
+                android:layout_width="10dp"
+                android:layout_height="20dp"
+                android:layout_marginLeft="2dp"
+                android:background="@android:color/darker_gray"/>
+            <View
+                android:id="@+id/view3"
+                android:layout_width="10dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="2dp"
+                android:background="@android:color/darker_gray"/>
+            <View
+                android:id="@+id/view4"
+                android:layout_width="10dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="2dp"
+                android:background="@android:color/darker_gray"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/mobile_percent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLength="6"
+            android:layout_marginTop="10dp"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:maxLines="1"
+            android:text="0%"/>
+    </LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/white"
+        android:text="Available Mobile Networks: "
+        android:textStyle="bold"
+        android:padding="10dp"/>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/list"
+        android:layout_marginLeft="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
+</LinearLayout>

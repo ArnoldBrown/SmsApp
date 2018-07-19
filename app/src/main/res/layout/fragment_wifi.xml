@@ -1,0 +1,99 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#006DD0"
+    tools:context="gonext.smsapp.fragments.WifiFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="WIFI Signal Strength"
+            android:textColor="@android:color/white"
+            android:textSize="18dp"
+            android:textStyle="bold"/>
+        <TextView
+            android:id="@+id/operatorName_wifi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Provider Name: None"
+            android:textColor="@android:color/white"
+            android:textSize="18dp"
+            android:textStyle="bold"/>
+        <TextView
+            android:id="@+id/wifi_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:text="Weak"
+            android:textSize="18dp"
+            android:textStyle="bold"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="bottom"
+            android:orientation="horizontal">
+            <View
+                android:id="@+id/wview1"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:background="@android:color/darker_gray"/>
+            <View
+                android:id="@+id/wview2"
+                android:layout_width="10dp"
+                android:layout_height="20dp"
+                android:layout_marginLeft="2dp"
+                android:background="@android:color/darker_gray"/>
+            <View
+                android:id="@+id/wview3"
+                android:layout_width="10dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="2dp"
+                android:background="@android:color/darker_gray"/>
+            <View
+                android:id="@+id/wview4"
+                android:layout_width="10dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="2dp"
+                android:background="@android:color/darker_gray"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/wifi_percent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:maxLength="6"
+            android:layout_marginTop="10dp"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:maxLines="1"
+            android:text="0%"/>
+    </LinearLayout>
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:textColor="@android:color/white"
+    android:text="Available Wifi: "
+    android:textStyle="bold"
+    android:padding="10dp"/>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/list"
+            android:layout_marginLeft="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
+</LinearLayout>
+</LinearLayout>
