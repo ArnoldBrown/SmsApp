@@ -79,9 +79,24 @@ public class Utils {
         return true;
     }
 
+//    public static String getImeNumber(Context context){
+//        try {
+//            return ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE)).getDeviceId();
+//        }catch (SecurityException e){
+//            e.printStackTrace();
+//        }
+//        return "";
+//    }
+
     public static String getImeNumber(Context context){
         try {
-            return ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE)).getDeviceId();
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                return Settings.Secure.getString(
+                        context.getContentResolver(),
+                        Settings.Secure.ANDROID_ID);
+            } else {
+                return ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE)).getDeviceId();
+            }
         }catch (SecurityException e){
             e.printStackTrace();
         }
