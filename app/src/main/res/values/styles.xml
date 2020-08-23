@@ -17,4 +17,14 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="BottomNavigationView" parent="@style/TextAppearance.MaterialComponents.Caption">
+        <item name="android:textSize">@dimen/_7ssp</item>
+        <item name="android:textColor">@color/colorBlack</item>
+    </style>
+
+    <style name="BottomNavigationView.Active" parent="@style/TextAppearance.MaterialComponents.Caption">
+        <item name="android:textSize">@dimen/_8ssp</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
 </resources>

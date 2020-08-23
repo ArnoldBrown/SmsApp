@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_menu_one"
+        android:icon="@drawable/menu_1"
+        android:title="@string/mysejahtera"/>
+
+    <item
+        android:id="@+id/action_menu_two"
+        android:icon="@drawable/menu_2"
+        android:title="@string/statistics"/>
+
+    <item
+        android:id="@+id/action_menu_three"
+        android:icon="@drawable/menu_3"
+        android:title="@string/check_in"/>
+
+    <item
+        android:id="@+id/action_menu_four"
+        android:icon="@drawable/menu_4"
+        android:title="@string/profile"/>
+
+</menu>

@@ -86,9 +86,9 @@
         android:text="Available Mobile Networks: "
         android:textStyle="bold"
         android:padding="10dp"/>
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list"
         android:layout_marginLeft="10dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
+        android:layout_height="wrap_content"></androidx.recyclerview.widget.RecyclerView>
 </LinearLayout>

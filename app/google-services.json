@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "8659165753",
+    "firebase_url": "https://check-network.firebaseio.com",
+    "project_id": "check-network",
+    "storage_bucket": "check-network.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:8659165753:android:032bca9279dcf4409ce3e8",
+        "android_client_info": {
+          "package_name": "gonext.smsapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "8659165753-augrj364t4n6idnj5mja38548eqsf77n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCC2WoGd4mZ7-_baA-TE2dd92ruL6kga4U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "8659165753-augrj364t4n6idnj5mja38548eqsf77n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

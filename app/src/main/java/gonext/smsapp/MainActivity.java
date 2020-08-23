@@ -10,25 +10,31 @@ import android.graphics.Color;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.view.PagerTabStrip;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.telephony.PhoneStateListener;
 import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.viewpager.widget.ViewPager;
 
 import com.astuetz.PagerSlidingTabStrip;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -42,11 +48,13 @@ import static android.telephony.PhoneStateListener.LISTEN_NONE;
 
 public class MainActivity extends AppCompatActivity {
     private int PERMISSION_FLAG = 2000;
+    String TAG = "FCCM";
    private ViewPager viewPager;
    private PagerAdapter pagerAdapter;
    private PagerSlidingTabStrip pagerTabStrip;
    private WifiFragment wifiFragment;
    private MobileNetworkFragment mobileNetworkFragment;
+   public static String strToken="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,6 +93,28 @@ public class MainActivity extends AppCompatActivity {
         ComponentName componentName = new ComponentName(this, MainActivity.class); // activity which is first time open in manifiest file which is declare as <category android:name="android.intent.category.LAUNCHER" />
         p.setComponentEnabledSetting(componentName,PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);*/
             startService(new Intent(this, BackgroundJob.class)); //start service which is BackgroundJob.java
+        initFCM();
+    }
+
+    private void initFCM() {
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w(TAG, "getInstanceId failed", task.getException());
+                            return;
+                        }
+
+                        // Get new Instance ID token
+                        strToken = task.getResult().getToken();
+
+                        // Log and toast
+//                        String msg = getString("R.string.msg_token_fmt", token);
+                        Log.e("TAG_BOTT", ""+strToken);
+//                        Toast.makeText(MainActivity.this, strToken, Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     private void checkAllPermissions(){

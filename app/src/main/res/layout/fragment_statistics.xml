@@ -1,0 +1,662 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:id="@+id/id_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_40sdp"
+        android:background="@color/colorPrimary">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Statistics"
+            android:layout_gravity="center"
+            android:textSize="@dimen/_20ssp"
+            android:layout_marginLeft="@dimen/_10sdp"
+            android:textColor="@color/colorWhite"/>
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_below="@+id/id_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_150sdp"
+                    android:background="@color/colorPrimary">
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorGray_lite">
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/_10sdp"
+                android:orientation="vertical">
+
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="none">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/id_tap_one_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/button_white_fill_style_curve"
+                            android:textSize="@dimen/_12ssp"
+                            android:padding="@dimen/_10sdp"
+                            android:textColor="@color/colorPrimary"
+                            android:text="COVID-19 Update"/>
+
+                        <TextView
+                            android:id="@+id/id_tap_two_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/edittext_outline_style_white"
+                            android:textSize="@dimen/_12ssp"
+                            android:padding="@dimen/_10sdp"
+                            android:layout_marginLeft="@dimen/_5sdp"
+                            android:textColor="@color/colorWhite"
+                            android:text="COVID-19 States"/>
+
+                        <TextView
+                            android:id="@+id/id_tap_three_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/edittext_outline_style_white"
+                            android:textSize="@dimen/_12ssp"
+                            android:padding="@dimen/_10sdp"
+                            android:layout_marginLeft="@dimen/_5sdp"
+                            android:textColor="@color/colorWhite"
+                            android:text="COVID-19 Global Update"/>
+
+
+                    </LinearLayout>
+
+
+
+                </HorizontalScrollView>
+
+                <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fadingEdge="none"
+                    android:scrollbars="none"
+                    android:fadingEdgeLength="0dp"
+                    android:cacheColorHint="#00000000"
+                    android:overScrollMode="never">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:id="@+id/id_tap_one_ll"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_20sdp"
+                            android:layout_marginBottom="@dimen/_50sdp"
+                            android:orientation="vertical">
+
+                            <androidx.cardview.widget.CardView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                app:cardCornerRadius="@dimen/_5sdp"
+                                android:layout_marginRight="@dimen/_1sdp"
+                                android:layout_marginLeft="@dimen/_1sdp">
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:background="@color/color_red"
+                                    android:layout_gravity="center"
+                                    android:padding="@dimen/_10sdp">
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="vertical">
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="Jumlah Kes Keseluruhan (Total Comfirmed Cases)"
+                                            android:textSize="@dimen/_15ssp"
+                                            android:gravity="center"
+                                            android:layout_marginLeft="@dimen/_20sdp"
+                                            android:layout_marginRight="@dimen/_20sdp"
+                                            android:textColor="@color/colorWhite"/>
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="setakat 12 August 2020, 17:34"
+                                            android:textSize="@dimen/_10sdp"
+                                            android:gravity="center"
+                                            android:textColor="@color/colorWhite"/>
+
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginTop="@dimen/_20sdp"
+                                            android:gravity="center"
+                                            android:text="9,103"
+                                            android:textSize="@dimen/_25ssp"
+                                            android:textColor="@color/colorWhite"/>
+
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:background="@drawable/button_white_fill_style"
+                                            android:text="+ 9 Hari Ini (Today)"
+                                            android:textSize="@dimen/_12ssp"
+                                            android:padding="@dimen/_5sdp"
+                                            android:gravity="center"
+                                            android:layout_marginTop="@dimen/_20sdp"
+                                            android:textColor="@color/color_red"/>
+
+                                    </LinearLayout>
+                                </LinearLayout>
+                            </androidx.cardview.widget.CardView>
+
+                            <androidx.cardview.widget.CardView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                app:cardCornerRadius="@dimen/_5sdp"
+                                android:layout_marginTop="@dimen/_20sdp"
+                                android:layout_marginRight="@dimen/_1sdp"
+                                android:layout_marginLeft="@dimen/_1sdp">
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:background="@color/colorGreen"
+                                    android:layout_gravity="center"
+                                    android:padding="@dimen/_10sdp">
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="vertical">
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="Jumlah Kes Keseluruhan (Total Recovered)"
+                                            android:textSize="@dimen/_15ssp"
+                                            android:gravity="center"
+                                            android:layout_marginLeft="@dimen/_20sdp"
+                                            android:layout_marginRight="@dimen/_20sdp"
+                                            android:textColor="@color/colorWhite"/>
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="setakat 12 August 2020, 17:34"
+                                            android:textSize="@dimen/_10sdp"
+                                            android:gravity="center"
+                                            android:textColor="@color/colorWhite"/>
+
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginTop="@dimen/_20sdp"
+                                            android:gravity="center"
+                                            android:text="8,809"
+                                            android:textSize="@dimen/_25ssp"
+                                            android:textColor="@color/colorWhite"/>
+
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:background="@drawable/button_white_fill_style"
+                                            android:text="+ 6 Hari Ini (Today)"
+                                            android:textSize="@dimen/_12ssp"
+                                            android:padding="@dimen/_5sdp"
+                                            android:gravity="center"
+                                            android:layout_marginTop="@dimen/_20sdp"
+                                            android:textColor="@color/colorGreen"/>
+
+                                    </LinearLayout>
+                                </LinearLayout>
+                            </androidx.cardview.widget.CardView>
+
+                            <androidx.cardview.widget.CardView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                app:cardCornerRadius="@dimen/_5sdp"
+                                android:layout_marginTop="@dimen/_20sdp"
+                                android:layout_marginRight="@dimen/_1sdp"
+                                android:layout_marginLeft="@dimen/_1sdp">
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:background="@color/colorBlack"
+                                    android:layout_gravity="center"
+                                    android:padding="@dimen/_10sdp">
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="vertical">
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="Jumlah Kematian (Total Death)"
+                                            android:textSize="@dimen/_15ssp"
+                                            android:layout_gravity="center"
+                                            android:layout_marginLeft="@dimen/_20sdp"
+                                            android:layout_marginRight="@dimen/_20sdp"
+                                            android:textColor="@color/colorWhite"/>
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="setakat 12 August 2020, 17:34"
+                                            android:textSize="@dimen/_10sdp"
+                                            android:gravity="center"
+                                            android:textColor="@color/colorWhite"/>
+
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginTop="@dimen/_20sdp"
+                                            android:gravity="center"
+                                            android:text="125"
+                                            android:textSize="@dimen/_25ssp"
+                                            android:textColor="@color/colorWhite"/>
+
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:background="@drawable/button_white_fill_style"
+                                            android:text="+ 0 Hari Ini (Today)"
+                                            android:textSize="@dimen/_12ssp"
+                                            android:padding="@dimen/_5sdp"
+                                            android:gravity="center"
+                                            android:layout_marginTop="@dimen/_20sdp"
+                                            android:textColor="@color/color_orange"/>
+
+                                    </LinearLayout>
+                                </LinearLayout>
+                            </androidx.cardview.widget.CardView>
+
+                            <androidx.cardview.widget.CardView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                app:cardCornerRadius="@dimen/_5sdp"
+                                android:layout_marginTop="@dimen/_20sdp"
+                                android:layout_marginRight="@dimen/_1sdp"
+                                android:layout_marginLeft="@dimen/_1sdp">
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:background="@color/color_orange"
+                                    android:layout_gravity="center"
+                                    android:padding="@dimen/_10sdp">
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="vertical">
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="Kes Aktif (Active Cases)"
+                                            android:textSize="@dimen/_15ssp"
+                                            android:gravity="center"
+                                            android:layout_marginLeft="@dimen/_20sdp"
+                                            android:layout_marginRight="@dimen/_20sdp"
+                                            android:textColor="@color/colorWhite"/>
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="setakat 12 August 2020, 17:34"
+                                            android:textSize="@dimen/_10sdp"
+                                            android:gravity="center"
+                                            android:textColor="@color/colorWhite"/>
+
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginTop="@dimen/_20sdp"
+                                            android:gravity="center"
+                                            android:text="169"
+                                            android:textSize="@dimen/_25ssp"
+                                            android:textColor="@color/colorWhite"/>
+
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:background="@drawable/button_white_fill_style"
+                                            android:text="+ 3 Hari Ini (Today)"
+                                            android:textSize="@dimen/_12ssp"
+                                            android:padding="@dimen/_5sdp"
+                                            android:gravity="center"
+                                            android:layout_marginTop="@dimen/_20sdp"
+                                            android:textColor="@color/color_red"/>
+
+                                    </LinearLayout>
+                                </LinearLayout>
+                            </androidx.cardview.widget.CardView>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/id_tap_two_ll"
+                            android:visibility="gone"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_20sdp"
+                            android:layout_marginBottom="@dimen/_50sdp"
+                            android:orientation="vertical">
+
+                            <androidx.cardview.widget.CardView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                app:cardCornerRadius="@dimen/_5sdp"
+                                android:layout_marginRight="@dimen/_1sdp"
+                                android:layout_marginLeft="@dimen/_1sdp">
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:background="@color/colorWhite"
+                                    android:layout_gravity="center"
+                                    android:padding="@dimen/_10sdp"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:text="Kes Mengikut Negeri (Cases by States)"
+                                        android:textColor="@color/colorBlack"
+                                        android:textSize="@dimen/_12ssp"
+                                        android:gravity="center"/>
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:gravity="center"
+                                        android:text="Graph loading..."
+                                        android:layout_marginTop="@dimen/_10sdp"
+                                        android:textColor="@color/colorGray"
+                                        android:textSize="@dimen/_15ssp"/>
+
+                                </LinearLayout>
+
+                            </androidx.cardview.widget.CardView>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/id_tap_three_ll"
+                            android:visibility="gone"
+                            android:layout_marginTop="@dimen/_20sdp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/_50sdp"
+                            android:orientation="vertical">
+
+                            <androidx.cardview.widget.CardView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                app:cardCornerRadius="@dimen/_5sdp"
+                                android:layout_marginRight="@dimen/_1sdp"
+                                android:layout_marginLeft="@dimen/_1sdp">
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:background="@color/color_red"
+                                    android:layout_gravity="center"
+                                    android:padding="@dimen/_10sdp">
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="vertical">
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="Jumlah Kes Keseluruhan (Total Comfirmed Cases)"
+                                            android:textSize="@dimen/_15ssp"
+                                            android:gravity="center"
+                                            android:layout_marginLeft="@dimen/_20sdp"
+                                            android:layout_marginRight="@dimen/_20sdp"
+                                            android:textColor="@color/colorWhite"/>
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="setakat 12 August 2020, 17:34"
+                                            android:textSize="@dimen/_10sdp"
+                                            android:gravity="center"
+                                            android:textColor="@color/colorWhite"/>
+
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginTop="@dimen/_20sdp"
+                                            android:gravity="center"
+                                            android:text="20,266,697"
+                                            android:textSize="@dimen/_25ssp"
+                                            android:textColor="@color/colorWhite"/>
+
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:background="@drawable/button_white_fill_style"
+                                            android:text="+ 237084 Hari Ini (Today)"
+                                            android:textSize="@dimen/_12ssp"
+                                            android:padding="@dimen/_5sdp"
+                                            android:gravity="center"
+                                            android:layout_marginTop="@dimen/_20sdp"
+                                            android:textColor="@color/color_red"/>
+
+                                    </LinearLayout>
+                                </LinearLayout>
+                            </androidx.cardview.widget.CardView>
+
+                            <androidx.cardview.widget.CardView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                app:cardCornerRadius="@dimen/_5sdp"
+                                android:layout_marginTop="@dimen/_20sdp"
+                                android:layout_marginRight="@dimen/_1sdp"
+                                android:layout_marginLeft="@dimen/_1sdp">
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:background="@color/colorGreen"
+                                    android:layout_gravity="center"
+                                    android:padding="@dimen/_10sdp">
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="vertical">
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="Jumlah Kes Keseluruhan (Total Recovered)"
+                                            android:textSize="@dimen/_15ssp"
+                                            android:gravity="center"
+                                            android:layout_marginLeft="@dimen/_20sdp"
+                                            android:layout_marginRight="@dimen/_20sdp"
+                                            android:textColor="@color/colorWhite"/>
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="setakat 12 August 2020, 17:34"
+                                            android:textSize="@dimen/_10sdp"
+                                            android:gravity="center"
+                                            android:textColor="@color/colorWhite"/>
+
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginTop="@dimen/_20sdp"
+                                            android:gravity="center"
+                                            android:text="12,998,964"
+                                            android:textSize="@dimen/_25ssp"
+                                            android:textColor="@color/colorWhite"/>
+
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:background="@drawable/button_white_fill_style"
+                                            android:text="+ 293499 Hari Ini (Today)"
+                                            android:textSize="@dimen/_12ssp"
+                                            android:padding="@dimen/_5sdp"
+                                            android:gravity="center"
+                                            android:layout_marginTop="@dimen/_20sdp"
+                                            android:textColor="@color/colorGreen"/>
+
+                                    </LinearLayout>
+                                </LinearLayout>
+                            </androidx.cardview.widget.CardView>
+
+                            <androidx.cardview.widget.CardView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                app:cardCornerRadius="@dimen/_5sdp"
+                                android:layout_marginTop="@dimen/_20sdp"
+                                android:layout_marginRight="@dimen/_1sdp"
+                                android:layout_marginLeft="@dimen/_1sdp">
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:background="@color/colorBlack"
+                                    android:layout_gravity="center"
+                                    android:padding="@dimen/_10sdp">
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="vertical">
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="Jumlah Kematian (Total Death)"
+                                            android:textSize="@dimen/_15ssp"
+                                            android:gravity="center"
+                                            android:layout_marginLeft="@dimen/_20sdp"
+                                            android:layout_marginRight="@dimen/_20sdp"
+                                            android:textColor="@color/colorWhite"/>
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="setakat 12 August 2020, 17:34"
+                                            android:textSize="@dimen/_10sdp"
+                                            android:gravity="center"
+                                            android:textColor="@color/colorWhite"/>
+
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginTop="@dimen/_20sdp"
+                                            android:gravity="center"
+                                            android:text="739,321"
+                                            android:textSize="@dimen/_25ssp"
+                                            android:textColor="@color/colorWhite"/>
+
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:background="@drawable/button_white_fill_style"
+                                            android:text="+ 5309 Hari Ini (Today)"
+                                            android:textSize="@dimen/_12ssp"
+                                            android:padding="@dimen/_5sdp"
+                                            android:gravity="center"
+                                            android:layout_marginTop="@dimen/_20sdp"
+                                            android:textColor="@color/color_red"/>
+
+                                    </LinearLayout>
+                                </LinearLayout>
+                            </androidx.cardview.widget.CardView>
+
+                            <androidx.cardview.widget.CardView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                app:cardCornerRadius="@dimen/_5sdp"
+                                android:layout_marginTop="@dimen/_20sdp"
+                                android:layout_marginRight="@dimen/_1sdp"
+                                android:layout_marginLeft="@dimen/_1sdp">
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:background="@color/color_orange"
+                                    android:layout_gravity="center"
+                                    android:padding="@dimen/_10sdp">
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="vertical">
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="Kes Aktif (Active Cases)"
+                                            android:textSize="@dimen/_15ssp"
+                                            android:gravity="center"
+                                            android:layout_marginLeft="@dimen/_20sdp"
+                                            android:layout_marginRight="@dimen/_20sdp"
+                                            android:textColor="@color/colorWhite"/>
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="setakat 12 August 2020, 17:34"
+                                            android:textSize="@dimen/_10sdp"
+                                            android:gravity="center"
+                                            android:textColor="@color/colorWhite"/>
+
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginTop="@dimen/_20sdp"
+                                            android:gravity="center"
+                                            android:text="6,528,412"
+                                            android:textSize="@dimen/_25ssp"
+                                            android:textColor="@color/colorWhite"/>
+
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:background="@drawable/button_white_fill_style"
+                                            android:text="- 61724 Hari Ini (Today)"
+                                            android:textSize="@dimen/_12ssp"
+                                            android:padding="@dimen/_5sdp"
+                                            android:gravity="center"
+                                            android:layout_marginTop="@dimen/_20sdp"
+                                            android:textColor="@color/colorGreen"/>
+
+                                    </LinearLayout>
+                                </LinearLayout>
+                            </androidx.cardview.widget.CardView>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </ScrollView>
+
+            </LinearLayout>
+
+        </FrameLayout>
+
+</RelativeLayout>
